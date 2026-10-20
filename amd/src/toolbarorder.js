@@ -112,9 +112,11 @@ export const init = async(fieldId, previewId, loadEditor) => {
 
     // The list offers the buttons on the toolbar and the ones for the menu bar commands, not the buttons
     // of the context toolbars (table rows and cells, image, quick toolbars with Heading 1–6 and so on).
-    const offered = new Set(editor.options.get('toolbar').flatMap((section) => section.items));
+    // TinyMCE keeps the button names in lower case, while plugins may use capitals (such as tiny_mce_wiris_formulaEditor).
+    const offered = new Set(editor.options.get('toolbar').flatMap((section) => section.items)
+        .map((name) => name.toLowerCase()));
     Object.values(editor.options.get('menu') ?? {}).forEach((menu) => {
-        (menu.items ?? '').split(/\s+/).forEach((name) => offered.add(name));
+        (menu.items ?? '').split(/\s+/).forEach((name) => offered.add(name.toLowerCase()));
     });
     const list = preview.querySelector('[data-region="buttons"]');
     Object.keys(buttons).filter((name) => offered.has(name)).sort().forEach((name) => {

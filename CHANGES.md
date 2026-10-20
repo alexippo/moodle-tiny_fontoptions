@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.8.1 (2026102301)
+
+* The list of buttons below the toolbar order settings left out buttons whose names have capitals,
+  such as MathType and ChemType of the Wiris plugin (`tiny_mce_wiris_formulaEditor`,
+  `tiny_mce_wiris_formulaEditorChemistry`): TinyMCE keeps the names in lower case.
+
 ## 1.8.0 (2026102300)
 
 * New settings "Toolbar order (computer and tablet)" and "Toolbar order (phone)": the toolbar sections and buttons
