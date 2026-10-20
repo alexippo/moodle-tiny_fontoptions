@@ -71,6 +71,22 @@ If `tiny_fontfamily` or `tiny_fontsize` are enabled, their items appear twice;
 the settings page shows a warning. Disable them in
 Site administration > Plugins > Text editors > TinyMCE editor > General settings.
 
+## Accessibility
+
+Moodle leaves these controls out of the toolbar on purpose, so think about who reads the content:
+
+* Font family, font size and colours are written into the text as inline styles. They override the theme,
+  so the text can look different from the rest of the site, and in a dark theme or the Moodle app.
+  Keep enough contrast between the text and background colours (WCAG 2.1 asks for 4.5:1 for normal text),
+  and do not use colour alone to carry meaning.
+* Justified text is harder to read for some people, for example people with dyslexia.
+* Headings start at Heading 3, as in Moodle core, so the page heading structure stays correct
+  for screen readers. Use headings for structure rather than a bigger font size.
+
+Every feature can be switched off in the settings, and the `tiny/fontoptions:use` capability can limit the plugin
+to some roles, for example teachers only. Moodle's own Accessibility checker (tiny_accessibilitychecker) still
+reports low contrast and other issues in the edited text.
+
 ## Screenshots
 
 | Headings | Font family | Font size |
