@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.7.3 (2026102208)
+
+* With "Show all toolbar buttons", the first button in the opened drawer (such as Image) got the focus when
+  the editor was loaded, on Moodle before 5.2. Their TinyMCE 7 takes the option not to move the focus
+  in another form than TinyMCE 8 (Moodle 5.2 and later); both are handled now.
+
 ## 1.7.2 (2026102207)
 
 * The text of the headings and font lists was dark on a dark toolbar, with dark mode plugins for Moodle

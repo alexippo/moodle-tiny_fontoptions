@@ -77,8 +77,12 @@ export const setup = (editor, tinyMCE) => {
             return;
         }
         if (editor.options.get(expandToolbarName) && !tinyMCE.Env.deviceType.isPhone()) {
+            // Without skipping the focus TinyMCE focuses the first button in the drawer.
+            // TinyMCE 6 and 7 (Moodle 4.5-5.1) take skipFocus as the command value; TinyMCE 8 takes skip_focus
+            // in the command arguments and reports skipFocus as deprecated.
+            const value = parseInt(tinyMCE.majorVersion) < 8 ? {skipFocus: true} : undefined;
             // eslint-disable-next-line camelcase
-            editor.execCommand('ToggleToolbarDrawer', false, undefined, {skip_focus: true});
+            editor.execCommand('ToggleToolbarDrawer', false, value, {skip_focus: true});
         }
     }));
 };
