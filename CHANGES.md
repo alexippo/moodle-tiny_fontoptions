@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.7.1 (2026102206)
+
+* "Show all toolbar buttons" did not open the toolbar: the drawer was opened on the editor init event,
+  before TinyMCE builds the toolbar (it does that once its skin has loaded). It is opened after that now.
+  Checked in Chromium with TinyMCE 8.
+
 ## 1.7.0 (2026102205)
 
 * New setting "Show all toolbar buttons", enabled by default: the "More" (⋯) part of the toolbar is opened

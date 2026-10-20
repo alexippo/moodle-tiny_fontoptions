@@ -66,12 +66,19 @@ export const setup = (editor, tinyMCE) => {
                 update();
             }
         });
+    });
 
-        // Show all buttons, except on phones, where the extra rows would take half of the screen.
-        // The "More" button still collapses them. Nothing is shown while every button fits on the first row.
+    // Show all buttons, except on phones, where the extra rows would take half of the screen.
+    // The "More" button still collapses them. Nothing is shown while every button fits on the first row.
+    // TinyMCE builds the toolbar when its skin has loaded, in a SkinLoaded handler of its own which runs after this one,
+    // so the drawer is opened once that has finished.
+    editor.once('SkinLoaded', () => setTimeout(() => {
+        if (editor.removed || editor.options.get('toolbar_mode') !== 'sliding') {
+            return;
+        }
         if (editor.options.get(expandToolbarName) && !tinyMCE.Env.deviceType.isPhone()) {
             // eslint-disable-next-line camelcase
             editor.execCommand('ToggleToolbarDrawer', false, undefined, {skip_focus: true});
         }
-    });
+    }));
 };
