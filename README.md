@@ -26,28 +26,32 @@ Access is controlled by the `tiny/fontoptions:use` capability.
 The toolbar follows the usual word processor order:
 
 ```
-computer, tablet: undo redo | headings | B I U S | x² x₂ | colours clear | lists | font size | links media… | table Ω — | …
-phone:            undo redo | B I U S | x² x₂ | colours clear | lists | headings | font size | links media… | table Ω — | …
+computer, tablet: undo redo | B I U S | colours clear | x² x₂ Ω | font family, size | headings, indent, lists
+                  | align | links | media | table — | full screen | the other buttons
+phone:            undo redo | B I U S | colours clear | x² x₂ Ω | font family, size | headings | align | lists
+                  | links | media | table — | full screen | the other buttons
 ```
 
-On a computer this is the TinyMCE default order (`undo redo | styles | bold italic`). TinyMCE moves whole
-sections to the "More" (⋯) drawer, from the end, so the most used ones come first and the wide font lists
-after them; the sections are kept short, as the drawer wraps them. Moodle's bullet and numbered lists section
-is moved up from the end of the toolbar, where it was always in the drawer. On phones the first row has
-room for a few buttons only, so the text formatting comes first.
+TinyMCE moves whole sections to the "More" (⋯) drawer, from the end, so the most used ones come first and the
+wide lists (fonts, headings) after them; the sections are kept short, as the drawer wraps them. A section wider than
+the row is split, so on phones the headings list is a section of its own. The buttons of some other plugins get
+their places too, when the site has them: Styles (tiny_styles) after the colours on a computer, MathType and
+ChemType (tiny_wiris) and the Moodle equation editor after the special characters (on phones before full screen),
+Cancel automatic link (tiny_noautolink) after the links, H5P after the media. All other buttons, such as those of
+plugins installed later, follow in their usual sections. The order can be changed in the settings, see below.
 
-* `headings` adds the `blocks` section (after undo/redo; on phones after the lists).
-* `showtoolbar` adds the `fonts` section (font family, font size) after the lists (on phones after the
-  headings), and the colour buttons to the `colors` section.
-  The `tiny_fontcolor` buttons are moved to that section too.
-* `textformat` adds Underline and Strikethrough after Italic, the `script` section (Superscript, Subscript),
-  and Clear formatting at the end of the `colors` section.
-* `insert` adds the `insert` section after Moodle's `content` section (link, image, media).
+* `headings` adds the headings list.
+* `showtoolbar` adds the font family and font size lists, and the colour buttons.
+  The `tiny_fontcolor` buttons are put in their place too.
+* `textformat` adds Underline, Strikethrough, Superscript, Subscript and Clear formatting.
+* `insert` adds Special character, Table and Horizontal line.
   Table and Special character are only added while Moodle loads those TinyMCE plugins.
 * `mobiletoolbar` sets the toolbar mode on phones and tablets: `sliding` (default, as on a computer,
   with the "More" (⋯) button), `scrolling` (the TinyMCE default for these devices: one row that scrolls
   sideways) or `wrap` (all buttons, on as many rows as needed; on a phone they can cover most of the
   editing area).
+
+A button which a setting leaves out is not shown, even though the default order has a place for it.
 
 With the "More" (⋯) button, the editor grows by the height of the opened drawer, so the editing area
 keeps its size (Moodle gives the editor a fixed height, and the drawer used to take its space).
@@ -59,7 +63,7 @@ rows would take half of the screen.
 ### Your own toolbar order
 
 `toolbarorder` (computer and tablet) and `toolbarorderphone` (phone) put the toolbar into any order,
-with the buttons of other Tiny plugins too. Empty (the default) keeps the order above. Otherwise one section
+with the buttons of other Tiny plugins too. Empty (the default) keeps the default order above. Otherwise one section
 per line, button names separated by spaces:
 
 ```
@@ -85,7 +89,7 @@ settings page there.
 
 A button that is already on the toolbar is not added twice. Moodle configures the Tiny plugins in
 alphabetical order, so plugins named after `fontoptions` (h5p, link, media, premium, styles…)
-add their buttons after these changes; their positions are left as they are.
+add their buttons after this plugin; the order is applied when the editor is set up, after all of them.
 
 Not included on purpose:
 

@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.9.0 (2026102400)
+
+* New default toolbar order, the one used on our sites: undo redo | B I U S | colours, clear formatting
+  | superscript, subscript, special character | font family and size | headings, indent, lists | align | links | media
+  | table, horizontal line | full screen, then all other buttons. On phones the headings, the alignment and the lists
+  are sections of their own, so that none of them is split on a narrow screen (Numbered list ended up alone on a row).
+  Styles (tiny_styles), MathType and ChemType (tiny_wiris), the equation editor, Cancel automatic link
+  (tiny_noautolink) and H5P get their places in it too, when the site has them.
+  Sites with their own toolbar order settings are not affected; the default order is shown below the settings
+  and can be copied into them as before.
 ## 1.8.1 (2026102301)
 
 * The list of buttons below the toolbar order settings left out buttons whose names have capitals,

@@ -21,15 +21,9 @@
  * and does not load the advlist and autolink TinyMCE plugins,
  * so they are added back here after that has happened.
  *
- * Toolbar layout, in the TinyMCE default order (headings, then the text formatting):
- * history | blocks | formatting | script | colors | lists | fonts | content | insert | ... the rest of the Moodle toolbar.
- * TinyMCE moves whole sections to the "More" drawer, from the end, so the most used ones come first:
- * the Moodle lists section is moved up from the end of the toolbar, and the wide font lists come after it.
- * The sections are kept short, as the drawer wraps them.
- * On phones, where the first toolbar row has room for a few buttons only,
- * the text formatting comes first: history | formatting | script | colors | lists | blocks | fonts | content | ...
- * Plugins configured after this one (by name) add their buttons after ours.
- * The toolbar order settings, when set, then rearrange the whole toolbar, with the buttons of all plugins.
+ * The buttons are added to toolbar sections here; plugins configured after this one (by name) add theirs after ours.
+ * Once every plugin has been configured, the toolbar is put into the order of the toolbar order settings,
+ * or else into the default order (see defaultOrders), with the buttons of all plugins.
  *
  * @module      tiny_fontoptions/configuration
  * @copyright   2026 Donetsk Regional Institute of Postgraduate Pedagogical Education <donoippo@gmail.com>
@@ -57,6 +51,29 @@ import {
     scriptItems,
     textFormatItems,
 } from './common';
+
+/**
+ * @var {Object} The default toolbar orders, in the format of plugininfo::format_toolbar_order().
+ *
+ * TinyMCE moves whole sections to the "More" drawer, from the end, so the most used ones come first
+ * and the wide lists (fonts, headings) after them. The sections are kept short, as the drawer wraps them,
+ * and a section wider than a phone screen would be split, so there the wide headings list is a section of its own.
+ * On phones, where the first toolbar row has room for a few buttons only, the lists get a section of their own too.
+ * The buttons of other plugins are placed as well, when the site has them; all other buttons follow ("*").
+ */
+const defaultOrders = {
+    desktop: 'undo redo | bold italic underline strikethrough'
+        + ' | tiny_forecolor tiny_backcolor forecolor backcolor tiny_styles_button removeformat'
+        + ' | superscript subscript emoticons charmap tiny_equation tiny_mce_wiris_formulaeditor'
+        + ' tiny_mce_wiris_formulaeditorchemistry | fontfamily fontsize | blocks outdent indent bullist numlist'
+        + ' | alignleft aligncenter alignright alignjustify | tiny_link_link tiny_link_unlink tiny_noautolink'
+        + ' | tiny_media_image tiny_media_video tiny_h5p | table hr | fullscreen | *',
+    phone: 'undo redo | bold italic underline strikethrough | tiny_forecolor tiny_backcolor forecolor backcolor removeformat'
+        + ' | superscript subscript emoticons charmap | fontfamily fontsize'
+        + ' | blocks | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent'
+        + ' | tiny_link_link tiny_link_unlink tiny_noautolink | tiny_media_image tiny_media_video tiny_h5p | table hr'
+        + ' | tiny_equation tiny_mce_wiris_formulaeditor tiny_mce_wiris_formulaeditorchemistry fullscreen | *',
+};
 
 /** @var {boolean} Whether TinyMCE runs on a phone. */
 let phone = false;
@@ -185,7 +202,6 @@ const firstSection = (toolbar, names) =>
 
 const getToolbarConfiguration = (instanceConfig, config) => {
     let toolbar = instanceConfig.toolbar ?? [];
-    const onPhone = isPhone(config.preview);
 
     if (config.justify) {
         // Moodle removes this button from the alignment section.
@@ -215,15 +231,13 @@ const getToolbarConfiguration = (instanceConfig, config) => {
     // Moodle has the bullet and numbered lists at the end of the toolbar, so they were always in the drawer.
     toolbar = moveSection(toolbar, 'lists', firstSection(toolbar, ['colors', 'script', 'formatting']));
 
-    // The headings come before the text formatting on a computer, and after it on phones.
-    // The font lists come after both: they are wide and needed less often.
+    // The wide lists come after the text formatting; the default order puts them in their places (see defaultOrders).
     const afterFormatting = firstSection(toolbar, ['lists', 'colors', 'script', 'formatting']);
-    if (config.headings) {
-        toolbar = addSection(toolbar, 'blocks', onPhone ? afterFormatting : 'history', [blocksItem]);
-    }
     if (config.showtoolbar) {
-        const fontsAfter = onPhone ? firstSection(toolbar, ['blocks', afterFormatting]) : afterFormatting;
-        toolbar = addSection(toolbar, 'fonts', fontsAfter, [fontFamilyItem, fontSizeItem]);
+        toolbar = addSection(toolbar, 'fonts', afterFormatting, [fontFamilyItem, fontSizeItem]);
+    }
+    if (config.headings) {
+        toolbar = addSection(toolbar, 'blocks', afterFormatting, [blocksItem]);
     }
 
     if (config.insert) {
@@ -276,11 +290,15 @@ const moveFormattingExtra = (toolbar) => {
  *
  * @param {Array} toolbar
  * @param {string} order Sections separated by "|", buttons by spaces, see plugininfo::format_toolbar_order().
+ * @param {boolean} onlyToolbar Leave out the listed buttons which are not on the toolbar. TinyMCE has some of them
+ *     even when the plugin settings leave them out, such as the font lists.
  * @returns {Array}
  */
-export const applyOrder = (toolbar, order) => {
+export const applyOrder = (toolbar, order, onlyToolbar = false) => {
+    const onToolbar = new Set(toolbar.flatMap((item) => item.items).map((button) => button.toLowerCase()));
     const sections = order.split('|')
-        .map((section) => section.trim().split(/\s+/).filter(Boolean))
+        .map((section) => section.trim().split(/\s+/)
+            .filter((button) => button && (!onlyToolbar || button === '*' || onToolbar.has(button))))
         .filter((items) => items.length);
     const listed = sections.flat();
     const rest = toolbar
@@ -320,9 +338,7 @@ export const setupToolbar = (editor) => {
         toolbar = moveFormattingExtra(toolbar);
     }
     const order = editor.options.get(getPluginOptionName(pluginName, onPhone ? 'toolbarorderphone' : 'toolbarorder'));
-    if (order) {
-        toolbar = applyOrder(toolbar, order);
-    }
+    toolbar = order ? applyOrder(toolbar, order) : applyOrder(toolbar, defaultOrders[onPhone ? 'phone' : 'desktop'], true);
     editor.options.set('toolbar', toolbar);
 };
 
