@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.9.1 (2026102401)
+
+* Simpler toolbar code: the plugin adds its buttons and the toolbar order puts every button in its place,
+  so the earlier moves of toolbar sections (the lists, the tiny_fontcolor buttons, the tiny_styles button on phones)
+  are no longer needed. The toolbar looks the same.
+* The editor now grows with the "More" (⋯) drawer also when the drawer is opened before the editor content
+  has loaded: the plugin no longer waits for the content for that.
 ## 1.9.0 (2026102400)
 
 * New default toolbar order, the one used on our sites: undo redo | B I U S | colours, clear formatting

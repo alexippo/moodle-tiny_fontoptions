@@ -40,7 +40,6 @@ import {
     backColorItem,
     blocksItem,
     extraPlugins,
-    fontColorItems,
     fontFamilyItem,
     fontSizeItem,
     foreColorItem,
@@ -157,49 +156,6 @@ const addSection = (toolbar, name, relativeTo, buttons) => {
     return addButtons(toolbar, name, buttons);
 };
 
-/**
- * Remove buttons from a toolbar section.
- *
- * @param {Array} toolbar
- * @param {string} section
- * @param {string[]} buttons
- * @returns {Array}
- */
-const removeButtons = (toolbar, section, buttons) => toolbar.map((item) => {
-    if (item.name !== section) {
-        return item;
-    }
-    return {...item, items: item.items.filter((button) => !buttons.includes(button))};
-});
-
-/**
- * Move a toolbar section after another one.
- *
- * @param {Array} toolbar
- * @param {string} name
- * @param {string} relativeTo
- * @returns {Array}
- */
-const moveSection = (toolbar, name, relativeTo) => {
-    const section = toolbar.find((item) => item.name === name);
-    if (!section || !toolbar.some((item) => item.name === relativeTo)) {
-        return toolbar;
-    }
-    const result = toolbar.filter((item) => item !== section);
-    result.splice(result.findIndex((item) => item.name === relativeTo) + 1, 0, section);
-    return result;
-};
-
-/**
- * Get the first of the given sections which is on the toolbar.
- *
- * @param {Array} toolbar
- * @param {string[]} names
- * @returns {string}
- */
-const firstSection = (toolbar, names) =>
-    names.find((name) => toolbar.some((item) => item.name === name)) ?? names[names.length - 1];
-
 const getToolbarConfiguration = (instanceConfig, config) => {
     let toolbar = instanceConfig.toolbar ?? [];
 
@@ -207,45 +163,29 @@ const getToolbarConfiguration = (instanceConfig, config) => {
         // Moodle removes this button from the alignment section.
         toolbar = addButtons(toolbar, 'alignment', [alignJustifyItem]);
     }
-
-    // Bold, Italic, Underline, Strikethrough in the Moodle formatting section, then two short sections,
-    // so that no button ends up alone on a row when the toolbar wraps.
     if (config.textformat) {
         toolbar = addButtons(toolbar, 'formatting', textFormatItems, 'italic');
-        toolbar = addSection(toolbar, 'script', 'formatting', scriptItems);
     }
 
-    // The tiny_fontcolor buttons are moved there too, so the colours are in the same place whichever plugin adds them.
-    const formatting = toolbar.find((item) => item.name === 'formatting')?.items ?? [];
-    const otherColors = fontColorItems.filter((button) => formatting.includes(button));
-    toolbar = removeButtons(toolbar, 'formatting', otherColors);
-    const colors = [...otherColors];
-    if (config.showtoolbar && config.colors) {
-        colors.push(foreColorItem, backColorItem);
-    }
-    if (config.textformat) {
-        colors.push(removeFormatItem);
-    }
-    toolbar = addSection(toolbar, 'colors', firstSection(toolbar, ['script', 'formatting']), colors);
-
-    // Moodle has the bullet and numbered lists at the end of the toolbar, so they were always in the drawer.
-    toolbar = moveSection(toolbar, 'lists', firstSection(toolbar, ['colors', 'script', 'formatting']));
-
-    // The wide lists come after the text formatting; the default order puts them in their places (see defaultOrders).
-    const afterFormatting = firstSection(toolbar, ['lists', 'colors', 'script', 'formatting']);
-    if (config.showtoolbar) {
-        toolbar = addSection(toolbar, 'fonts', afterFormatting, [fontFamilyItem, fontSizeItem]);
-    }
-    if (config.headings) {
-        toolbar = addSection(toolbar, 'blocks', afterFormatting, [blocksItem]);
-    }
-
+    // The other buttons get sections of their own after the text formatting.
+    // Their places on the toolbar come from the toolbar order (see defaultOrders).
+    let after = 'formatting';
+    const add = (name, buttons) => {
+        toolbar = addSection(toolbar, name, after, buttons);
+        if (toolbar.some((item) => item.name === name)) {
+            after = name;
+        }
+    };
+    const colors = config.showtoolbar && config.colors ? [foreColorItem, backColorItem] : [];
+    add('colors', config.textformat ? [...colors, removeFormatItem] : colors);
+    add('script', config.textformat ? scriptItems : []);
+    add('fonts', config.showtoolbar ? [fontFamilyItem, fontSizeItem] : []);
+    add('blocks', config.headings ? [blocksItem] : []);
     if (config.insert) {
         const plugins = instanceConfig.plugins ?? [];
-        const buttons = Object.entries(insertItems)
+        add('insert', Object.entries(insertItems)
             .filter(([, plugin]) => plugin === null || plugins.includes(plugin))
-            .map(([button]) => button);
-        toolbar = addSection(toolbar, 'insert', 'content', buttons);
+            .map(([button]) => button));
     }
 
     return toolbar;
@@ -257,29 +197,6 @@ const getPluginsConfiguration = (instanceConfig, config) => {
         .filter((plugin) => config[plugin] && !plugins.includes(plugin))
         .forEach((plugin) => plugins.push(plugin));
     return plugins;
-};
-
-/**
- * On phones, give the buttons which other plugins add to the formatting section a section of their own,
- * after the headings.
- *
- * Plugins configured after this one (such as tiny_styles with its wide list) add them to the end of the section
- * with Bold, Italic, Underline and Strikethrough, which then did not fit on the first toolbar row of a phone,
- * so TinyMCE put the whole section into the "More" drawer.
- *
- * @param {Array} toolbar
- * @returns {Array}
- */
-const moveFormattingExtra = (toolbar) => {
-    const formatting = toolbar.find((item) => item.name === 'formatting');
-    const own = ['bold', 'italic', ...textFormatItems];
-    const others = (formatting?.items ?? []).filter((button) => !own.includes(button));
-    if (!others.length) {
-        return toolbar;
-    }
-    const result = removeButtons(toolbar, 'formatting', others);
-    return addSection(result, 'formattingextra', firstSection(result, ['blocks', 'lists', 'colors', 'script', 'formatting']),
-        others);
 };
 
 /**
@@ -329,17 +246,15 @@ export const applyOrder = (toolbar, order, onlyToolbar = false) => {
  * @param {TinyMCE.Editor} editor
  */
 export const setupToolbar = (editor) => {
-    let toolbar = editor.options.get('toolbar');
+    const toolbar = editor.options.get('toolbar');
     if (!Array.isArray(toolbar)) {
         return;
     }
     const onPhone = isPhone(editor.options.get(getPluginOptionName(pluginName, 'preview')));
-    if (onPhone) {
-        toolbar = moveFormattingExtra(toolbar);
-    }
     const order = editor.options.get(getPluginOptionName(pluginName, onPhone ? 'toolbarorderphone' : 'toolbarorder'));
-    toolbar = order ? applyOrder(toolbar, order) : applyOrder(toolbar, defaultOrders[onPhone ? 'phone' : 'desktop'], true);
-    editor.options.set('toolbar', toolbar);
+    editor.options.set('toolbar', order
+        ? applyOrder(toolbar, order)
+        : applyOrder(toolbar, defaultOrders[onPhone ? 'phone' : 'desktop'], true));
 };
 
 export const configure = (instanceConfig, options) => {

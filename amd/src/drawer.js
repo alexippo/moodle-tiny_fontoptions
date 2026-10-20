@@ -70,7 +70,9 @@ export const setup = (editor, tinyMCE) => {
         }
     };
 
-    editor.on('init', () => {
+    // Set up when the editor container exists. The drawer may be opened (see below) before or after the editor
+    // content is loaded ("init"), as that depends on whether the skin or the content styles load first.
+    editor.on('PostRender', () => {
         if (editor.options.get('toolbar_mode') !== 'sliding') {
             return;
         }
