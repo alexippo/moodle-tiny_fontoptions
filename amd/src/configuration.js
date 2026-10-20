@@ -22,11 +22,12 @@
  * so they are added back here after that has happened.
  *
  * Toolbar layout, in the TinyMCE default order (headings, then the text formatting):
- * history | blocks | formatting | script | colors | fonts | content | insert | ... the rest of the Moodle toolbar.
- * TinyMCE moves whole sections to the "More" drawer, from the end, so the most used ones come first
- * and the wide font lists after them. The sections are kept short, as the drawer wraps them.
- * On phones and tablets, where the first toolbar row has room for a few buttons only,
- * the text formatting comes first: history | formatting | script | colors | blocks | fonts | content | ...
+ * history | blocks | formatting | script | colors | lists | fonts | content | insert | ... the rest of the Moodle toolbar.
+ * TinyMCE moves whole sections to the "More" drawer, from the end, so the most used ones come first:
+ * the Moodle lists section is moved up from the end of the toolbar, and the wide font lists come after it.
+ * The sections are kept short, as the drawer wraps them.
+ * On phones, where the first toolbar row has room for a few buttons only,
+ * the text formatting comes first: history | formatting | script | colors | lists | blocks | fonts | content | ...
  * Plugins configured after this one (by name) add their buttons after ours.
  *
  * @module      tiny_fontoptions/configuration
@@ -55,8 +56,8 @@ import {
     textFormatItems,
 } from './common';
 
-/** @var {boolean} Whether TinyMCE runs on a phone or tablet, where it uses its mobile options. */
-let touchDevice = false;
+/** @var {boolean} Whether TinyMCE runs on a phone. */
+let phone = false;
 
 /**
  * Remember the device type, once TinyMCE has been loaded.
@@ -64,8 +65,7 @@ let touchDevice = false;
  * @param {TinyMCE} tinyMCE
  */
 export const setTinyMCE = (tinyMCE) => {
-    const deviceType = tinyMCE.Env.deviceType;
-    touchDevice = deviceType.isPhone() || deviceType.isTablet();
+    phone = tinyMCE.Env.deviceType.isPhone();
 };
 
 const getMenuConfiguration = (instanceConfig, config) => {
@@ -146,6 +146,24 @@ const removeButtons = (toolbar, section, buttons) => toolbar.map((item) => {
 });
 
 /**
+ * Move a toolbar section after another one.
+ *
+ * @param {Array} toolbar
+ * @param {string} name
+ * @param {string} relativeTo
+ * @returns {Array}
+ */
+const moveSection = (toolbar, name, relativeTo) => {
+    const section = toolbar.find((item) => item.name === name);
+    if (!section || !toolbar.some((item) => item.name === relativeTo)) {
+        return toolbar;
+    }
+    const result = toolbar.filter((item) => item !== section);
+    result.splice(result.findIndex((item) => item.name === relativeTo) + 1, 0, section);
+    return result;
+};
+
+/**
  * Get the first of the given sections which is on the toolbar.
  *
  * @param {Array} toolbar
@@ -183,14 +201,17 @@ const getToolbarConfiguration = (instanceConfig, config) => {
     }
     toolbar = addSection(toolbar, 'colors', firstSection(toolbar, ['script', 'formatting']), colors);
 
-    // The headings come before the text formatting on a computer, and after it on phones and tablets.
+    // Moodle has the bullet and numbered lists at the end of the toolbar, so they were always in the drawer.
+    toolbar = moveSection(toolbar, 'lists', firstSection(toolbar, ['colors', 'script', 'formatting']));
+
+    // The headings come before the text formatting on a computer, and after it on phones.
     // The font lists come after both: they are wide and needed less often.
-    const afterFormatting = firstSection(toolbar, ['colors', 'script', 'formatting']);
+    const afterFormatting = firstSection(toolbar, ['lists', 'colors', 'script', 'formatting']);
     if (config.headings) {
-        toolbar = addSection(toolbar, 'blocks', touchDevice ? afterFormatting : 'history', [blocksItem]);
+        toolbar = addSection(toolbar, 'blocks', phone ? afterFormatting : 'history', [blocksItem]);
     }
     if (config.showtoolbar) {
-        const fontsAfter = touchDevice ? firstSection(toolbar, ['blocks', afterFormatting]) : afterFormatting;
+        const fontsAfter = phone ? firstSection(toolbar, ['blocks', afterFormatting]) : afterFormatting;
         toolbar = addSection(toolbar, 'fonts', fontsAfter, [fontFamilyItem, fontSizeItem]);
     }
 

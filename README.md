@@ -25,18 +25,19 @@ Access is controlled by the `tiny/fontoptions:use` capability.
 The toolbar follows the usual word processor order:
 
 ```
-computer:           undo redo | headings | B I U S | x² x₂ | colours clear | font size | links media… | table Ω — | …
-phones and tablets: undo redo | B I U S | x² x₂ | colours clear | headings | font size | links media… | table Ω — | …
+computer, tablet: undo redo | headings | B I U S | x² x₂ | colours clear | lists | font size | links media… | table Ω — | …
+phone:            undo redo | B I U S | x² x₂ | colours clear | lists | headings | font size | links media… | table Ω — | …
 ```
 
 On a computer this is the TinyMCE default order (`undo redo | styles | bold italic`). TinyMCE moves whole
 sections to the "More" (⋯) drawer, from the end, so the most used ones come first and the wide font lists
-after them; the sections are kept short, as the drawer wraps them. On phones and tablets the first row has
+after them; the sections are kept short, as the drawer wraps them. Moodle's bullet and numbered lists section
+is moved up from the end of the toolbar, where it was always in the drawer. On phones the first row has
 room for a few buttons only, so the text formatting comes first.
 
-* `headings` adds the `blocks` section (after undo/redo; on phones and tablets after the colours).
-* `showtoolbar` adds the `fonts` section (font family, font size) after the text formatting (on phones and
-  tablets after the headings), and the colour buttons to the `colors` section.
+* `headings` adds the `blocks` section (after undo/redo; on phones after the lists).
+* `showtoolbar` adds the `fonts` section (font family, font size) after the lists (on phones after the
+  headings), and the colour buttons to the `colors` section.
   The `tiny_fontcolor` buttons are moved to that section too.
 * `textformat` adds Underline and Strikethrough after Italic, the `script` section (Superscript, Subscript),
   and Clear formatting at the end of the `colors` section.

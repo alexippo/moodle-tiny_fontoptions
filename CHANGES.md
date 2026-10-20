@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.6.2 (2026102204)
+
+* The bullet and numbered lists come right after the text formatting. Moodle has them at the end of
+  the toolbar, so with the buttons this plugin adds they were always in the "More" drawer.
+* Tablets get the same toolbar order as a computer; only phones put the text formatting before the headings.
+
 ## 1.6.1 (2026102203)
 
 * On a computer the toolbar follows the TinyMCE default order: headings, then Bold, Italic, Underline,
