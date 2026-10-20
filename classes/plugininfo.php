@@ -48,6 +48,9 @@ class plugininfo extends plugin implements plugin_with_buttons, plugin_with_conf
     /** @var string Default font sizes, separated by spaces. */
     public const DEFAULT_FONTSIZES = '8pt 10pt 12pt 14pt 16pt 18pt 24pt 36pt';
 
+    /** @var string[] TinyMCE toolbar modes offered for phones and tablets. */
+    public const MOBILE_TOOLBAR_MODES = ['sliding', 'wrap', 'scrolling'];
+
     /**
      * Get the buttons this plugin makes available.
      *
@@ -111,10 +114,27 @@ class plugininfo extends plugin implements plugin_with_buttons, plugin_with_conf
             'headings' => (bool) get_config('tiny_fontoptions', 'headings'),
             'textformat' => (bool) get_config('tiny_fontoptions', 'textformat'),
             'insert' => (bool) get_config('tiny_fontoptions', 'insert'),
+            'mobiletoolbar' => self::get_mobile_toolbar_mode(),
             'advlist' => (bool) get_config('tiny_fontoptions', 'advlist'),
             'autolink' => (bool) get_config('tiny_fontoptions', 'autolink'),
             'advlistnumberstyles' => self::get_advlist_number_styles(),
         ];
+    }
+
+    /**
+     * The toolbar mode to use on phones and tablets.
+     *
+     * TinyMCE switches these devices to a single side-scrolling toolbar row unless told otherwise.
+     *
+     * @return string One of MOBILE_TOOLBAR_MODES, or an empty string to keep the TinyMCE default.
+     */
+    public static function get_mobile_toolbar_mode(): string {
+        $mode = get_config('tiny_fontoptions', 'mobiletoolbar');
+        if ($mode === false) {
+            // Not saved yet, e.g. before the upgrade has run.
+            return self::MOBILE_TOOLBAR_MODES[0];
+        }
+        return in_array($mode, self::MOBILE_TOOLBAR_MODES, true) ? $mode : '';
     }
 
     /**

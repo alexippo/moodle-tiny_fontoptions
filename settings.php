@@ -90,4 +90,16 @@ if ($ADMIN->fulltree) {
             1
         ));
     }
+
+    $modes = [];
+    foreach (plugininfo::MOBILE_TOOLBAR_MODES as $mode) {
+        $modes[$mode] = new lang_string("mobiletoolbar_{$mode}", 'tiny_fontoptions');
+    }
+    $settings->add(new admin_setting_configselect(
+        'tiny_fontoptions/mobiletoolbar',
+        new lang_string('mobiletoolbar', 'tiny_fontoptions'),
+        new lang_string('mobiletoolbar_desc', 'tiny_fontoptions'),
+        plugininfo::MOBILE_TOOLBAR_MODES[0],
+        $modes
+    ));
 }

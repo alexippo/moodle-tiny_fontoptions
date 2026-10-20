@@ -171,5 +171,10 @@ export const configure = (instanceConfig, options) => {
         // eslint-disable-next-line camelcase
         result.advlist_number_styles = config.advlistnumberstyles;
     }
+    if (config.mobiletoolbar) {
+        // TinyMCE merges this with its own phone and tablet defaults, which use a side-scrolling toolbar.
+        // eslint-disable-next-line camelcase
+        result.mobile = {...instanceConfig.mobile, toolbar_mode: config.mobiletoolbar};
+    }
     return result;
 };

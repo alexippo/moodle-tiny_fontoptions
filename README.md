@@ -14,10 +14,9 @@ and does not load some of its plugins. This plugin brings them back:
 | Headings (Paragraph, Heading 3–6, Preformatted, Blockquote) | toolbar | `headings` |
 | Underline, Strikethrough, Superscript, Subscript, Clear formatting | toolbar | `textformat` |
 | Table, Special character, Horizontal line | toolbar | `insert` |
+| Toolbar mode on phones and tablets | toolbar | `mobiletoolbar` |
 
 Access is controlled by the `tiny/fontoptions:use` capability.
-
-![The editor toolbar with the plugin enabled](screenshots/toolbar.jpg)
 
 ## Toolbar layout
 
@@ -33,6 +32,9 @@ undo redo | headings | font size | B I U S x² x₂ colours clear | links media�
 * `textformat` adds its buttons right after Italic, and Clear formatting after the colours.
 * `insert` adds the `insert` section after Moodle's `content` section (link, image, media).
   Table and Special character are only added while Moodle loads those TinyMCE plugins.
+* `mobiletoolbar` sets the toolbar mode on phones and tablets: `sliding` (default, as on a computer,
+  with the "More" (⋯) button), `wrap` (all buttons, on as many rows as needed) or `scrolling`
+  (the TinyMCE default for these devices: one row that scrolls sideways).
 
 A button that is already on the toolbar is not added twice. Moodle configures the Tiny plugins in
 alphabetical order, so plugins named after `fontoptions` (h5p, link, media, premium, styles…)
@@ -48,18 +50,6 @@ Not included on purpose:
 If `tiny_fontfamily` or `tiny_fontsize` are enabled, their items appear twice;
 the settings page shows a warning. Disable them in
 Site administration > Plugins > Text editors > TinyMCE editor > General settings.
-
-## Screenshots
-
-| Headings | Font family | Font size |
-|---|---|---|
-| ![Headings](screenshots/headings.jpg) | ![Font family](screenshots/font-family.jpg) | ![Font size](screenshots/font-size.jpg) |
-
-Settings:
-
-![Font settings](screenshots/settings-fonts.jpg)
-
-![Toolbar settings](screenshots/settings-toolbar.jpg)
 
 ## Requirements
 

@@ -140,7 +140,23 @@ final class plugininfo_test extends advanced_testcase {
         $this->assertTrue($config['insert']);
         $this->assertEqualsCanonicalizing([
             'fontfamilies', 'fontsizes', 'showtoolbar', 'colors', 'justify', 'headings', 'textformat', 'insert',
-            'advlist', 'autolink', 'advlistnumberstyles',
+            'advlist', 'autolink', 'advlistnumberstyles', 'mobiletoolbar',
         ], array_keys($config));
+    }
+
+    /**
+     * Test the toolbar mode for phones and tablets.
+     */
+    public function test_get_mobile_toolbar_mode(): void {
+        $this->resetAfterTest();
+
+        unset_config('mobiletoolbar', 'tiny_fontoptions');
+        $this->assertSame('sliding', plugininfo::get_mobile_toolbar_mode());
+
+        set_config('mobiletoolbar', 'wrap', 'tiny_fontoptions');
+        $this->assertSame('wrap', plugininfo::get_mobile_toolbar_mode());
+
+        set_config('mobiletoolbar', 'floating', 'tiny_fontoptions');
+        $this->assertSame('', plugininfo::get_mobile_toolbar_mode());
     }
 }

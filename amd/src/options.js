@@ -41,6 +41,7 @@ const pluginOptions = {
     headings: {processor: 'boolean', "default": false},
     textformat: {processor: 'boolean', "default": false},
     insert: {processor: 'boolean', "default": false},
+    mobiletoolbar: {processor: 'string', "default": ''},
 };
 
 /**

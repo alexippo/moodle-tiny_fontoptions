@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.5.0 (2026102200)
+
+* New setting "Toolbar on phones and tablets". TinyMCE puts all buttons in one side-scrolling row on these devices;
+  the default is now the same as on a computer: the buttons that do not fit go under the "More" (⋯) button.
+  Wrapping onto more rows and the TinyMCE side-scrolling row can be chosen instead.
+
 ## 1.4.1 (2026102101)
 
 * Copyright: Donetsk Regional Institute of Postgraduate Pedagogical Education.
