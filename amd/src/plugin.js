@@ -48,6 +48,7 @@ export default new Promise(async(resolve) => {
         setupCommands(editor);
         setupDrawer(editor, tinyMCE);
         setupColours(editor);
+        Configuration.setupToolbar(editor);
 
         return pluginMetadata;
     });

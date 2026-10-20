@@ -234,6 +234,34 @@ const getPluginsConfiguration = (instanceConfig, config) => {
     return plugins;
 };
 
+/**
+ * On phones, give the buttons which other plugins add to the formatting section a section of their own,
+ * after the headings.
+ *
+ * Plugins configured after this one (such as tiny_styles with its wide list) add them to the end of the section
+ * with Bold, Italic, Underline and Strikethrough, which then did not fit on the first toolbar row of a phone,
+ * so TinyMCE put the whole section into the "More" drawer. This runs when the editor is set up,
+ * once every plugin has been configured.
+ *
+ * @param {TinyMCE.Editor} editor
+ */
+export const setupToolbar = (editor) => {
+    const toolbar = editor.options.get('toolbar');
+    if (!phone || !Array.isArray(toolbar)) {
+        return;
+    }
+    const formatting = toolbar.find((item) => item.name === 'formatting');
+    const own = ['bold', 'italic', ...textFormatItems];
+    const others = (formatting?.items ?? []).filter((button) => !own.includes(button));
+    if (!others.length) {
+        return;
+    }
+    let result = removeButtons(toolbar, 'formatting', others);
+    result = addSection(result, 'formattingextra', firstSection(result, ['blocks', 'lists', 'colors', 'script', 'formatting']),
+        others);
+    editor.options.set('toolbar', result);
+};
+
 export const configure = (instanceConfig, options) => {
     const config = options?.plugins?.[pluginName]?.config ?? {};
     const result = {

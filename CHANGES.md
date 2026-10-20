@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.7.4 (2026102209)
+
+* On phones, Bold, Italic, Underline and Strikethrough were in the "More" drawer when another plugin
+  (such as tiny_styles) added a wide button to their toolbar section: the section no longer fitted on the first row.
+  On phones such buttons get a section of their own after the headings now.
+
 ## 1.7.3 (2026102208)
 
 * With "Show all toolbar buttons", the first button in the opened drawer (such as Image) got the focus when
