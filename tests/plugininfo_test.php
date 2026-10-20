@@ -140,7 +140,7 @@ final class plugininfo_test extends advanced_testcase {
         $this->assertTrue($config['insert']);
         $this->assertEqualsCanonicalizing([
             'fontfamilies', 'fontsizes', 'showtoolbar', 'colors', 'justify', 'headings', 'textformat', 'insert',
-            'advlist', 'autolink', 'advlistnumberstyles', 'mobiletoolbar',
+            'advlist', 'autolink', 'advlistnumberstyles', 'mobiletoolbar', 'expandtoolbar',
         ], array_keys($config));
     }
 

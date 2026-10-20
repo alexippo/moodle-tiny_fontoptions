@@ -30,6 +30,8 @@ $string['advlist_desc'] = 'Load the TinyMCE advlist plugin: the bullet and numbe
 $string['autolink'] = 'Automatic links';
 $string['autolink_desc'] = 'Load the TinyMCE autolink plugin: a web address or e-mail address becomes a link as soon as it is typed.';
 $string['conflictwarning'] = 'The {$a} plugin is enabled. It adds its own font items to the editor, so they will appear twice. Disable it in Site administration > Plugins > Text editors > TinyMCE editor > General settings.';
+$string['expandtoolbar'] = 'Show all toolbar buttons';
+$string['expandtoolbar_desc'] = 'Open the "More" (⋯) part of the toolbar when the editor is loaded, so all buttons are visible; the "More" button still collapses it. The editor grows by the height of the extra rows, so the editing area keeps its size. Not on phones, where the extra rows would take half of the screen.';
 $string['fontfamilies'] = 'Font families';
 $string['fontfamilies_desc'] = 'One font per line. Use "Label=font stack" (for example "Arial=arial,helvetica,sans-serif") or just a font name. Leave empty to use the defaults.';
 $string['fontoptions:use'] = 'Use font family, font size and colour controls in the TinyMCE editor';

@@ -14,6 +14,7 @@ and does not load some of its plugins. This plugin brings them back:
 | Headings (Paragraph, Heading 3–6, Preformatted, Blockquote) | toolbar | `headings` |
 | Underline, Strikethrough, Superscript, Subscript, Clear formatting | toolbar | `textformat` |
 | Table, Special character, Horizontal line | toolbar | `insert` |
+| All buttons visible when the editor is loaded | toolbar | `expandtoolbar` |
 | Toolbar mode on phones and tablets | toolbar | `mobiletoolbar` |
 
 Access is controlled by the `tiny/fontoptions:use` capability.
@@ -50,6 +51,10 @@ room for a few buttons only, so the text formatting comes first.
 
 With the "More" (⋯) button, the editor grows by the height of the opened drawer, so the editing area
 keeps its size (Moodle gives the editor a fixed height, and the drawer used to take its space).
+
+`expandtoolbar` (enabled by default) opens the drawer when the editor is loaded, so all buttons are visible
+on a computer or tablet; the "More" button still collapses it. It is not opened on phones, where the extra
+rows would take half of the screen.
 
 A button that is already on the toolbar is not added twice. Moodle configures the Tiny plugins in
 alphabetical order, so plugins named after `fontoptions` (h5p, link, media, premium, styles…)

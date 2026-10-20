@@ -120,6 +120,7 @@ class plugininfo extends plugin implements plugin_with_buttons, plugin_with_conf
             'textformat' => (bool) get_config('tiny_fontoptions', 'textformat'),
             'insert' => (bool) get_config('tiny_fontoptions', 'insert'),
             'mobiletoolbar' => self::get_mobile_toolbar_mode(),
+            'expandtoolbar' => (bool) get_config('tiny_fontoptions', 'expandtoolbar'),
             'advlist' => (bool) get_config('tiny_fontoptions', 'advlist'),
             'autolink' => (bool) get_config('tiny_fontoptions', 'autolink'),
             'advlistnumberstyles' => self::get_advlist_number_styles(),

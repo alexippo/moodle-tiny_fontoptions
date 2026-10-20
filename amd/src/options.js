@@ -42,6 +42,7 @@ const pluginOptions = {
     textformat: {processor: 'boolean', "default": false},
     insert: {processor: 'boolean', "default": false},
     mobiletoolbar: {processor: 'string', "default": ''},
+    expandtoolbar: {processor: 'boolean', "default": false},
 };
 
 /**

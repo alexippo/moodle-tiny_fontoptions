@@ -14,7 +14,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Keep the editing area size when the toolbar drawer is opened.
+ * Keep the editing area size when the toolbar drawer is opened, and open it when the editor is loaded.
  *
  * With the sliding toolbar, the "More" button opens a drawer with the buttons which do not fit on the first row.
  * Moodle gives the editor a fixed height, so the drawer took its space from the editing area,
@@ -25,12 +25,18 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+import {getPluginOptionName} from 'editor_tiny/options';
+import {pluginName} from './common';
+
+const expandToolbarName = getPluginOptionName(pluginName, 'expandtoolbar');
+
 /**
  * Make the editor grow and shrink with its toolbar drawer.
  *
  * @param {TinyMCE.Editor} editor
+ * @param {TinyMCE} tinyMCE
  */
-export const setup = (editor) => {
+export const setup = (editor, tinyMCE) => {
     // The height added to the editor for the drawer.
     let added = 0;
 
@@ -60,5 +66,12 @@ export const setup = (editor) => {
                 update();
             }
         });
+
+        // Show all buttons, except on phones, where the extra rows would take half of the screen.
+        // The "More" button still collapses them. Nothing is shown while every button fits on the first row.
+        if (editor.options.get(expandToolbarName) && !tinyMCE.Env.deviceType.isPhone()) {
+            // eslint-disable-next-line camelcase
+            editor.execCommand('ToggleToolbarDrawer', false, undefined, {skip_focus: true});
+        }
     });
 };

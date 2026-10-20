@@ -91,6 +91,13 @@ if ($ADMIN->fulltree) {
         ));
     }
 
+    $settings->add(new admin_setting_configcheckbox(
+        'tiny_fontoptions/expandtoolbar',
+        new lang_string('expandtoolbar', 'tiny_fontoptions'),
+        new lang_string('expandtoolbar_desc', 'tiny_fontoptions'),
+        1
+    ));
+
     $modes = [];
     foreach (plugininfo::MOBILE_TOOLBAR_MODES as $mode) {
         $modes[$mode] = new lang_string("mobiletoolbar_{$mode}", 'tiny_fontoptions');

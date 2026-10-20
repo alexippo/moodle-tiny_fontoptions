@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.7.0 (2026102205)
+
+* New setting "Show all toolbar buttons", enabled by default: the "More" (⋯) part of the toolbar is opened
+  when the editor is loaded (not on phones), so all buttons are visible; the "More" button still collapses it.
+  The editor grows by the height of the extra rows, so the editing area keeps its size.
+
 ## 1.6.2 (2026102204)
 
 * The bullet and numbered lists come right after the text formatting. Moodle has them at the end of

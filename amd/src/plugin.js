@@ -45,7 +45,7 @@ export default new Promise(async(resolve) => {
     tinyMCE.PluginManager.add(pluginName, (editor) => {
         registerOptions(editor);
         setupCommands(editor);
-        setupDrawer(editor);
+        setupDrawer(editor, tinyMCE);
 
         return pluginMetadata;
     });
