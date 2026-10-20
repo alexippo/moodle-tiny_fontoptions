@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.6.0 (2026102202)
+
+* The editor grows when the "More" (⋯) drawer of the toolbar is opened, so the drawer no longer covers
+  the editing area. "Toolbar on phones and tablets" defaults to this mode again.
+* Shorter toolbar sections: Bold, Italic, Underline, Strikethrough | Superscript, Subscript |
+  colours and Clear formatting. TinyMCE moves whole sections to the drawer and wraps them there,
+  so a long section left Clear formatting alone on a row.
+* The tiny_fontcolor buttons are moved to the colour section too.
+* On phones and tablets the most used buttons come first (undo/redo, Bold, Italic…),
+  headings and fonts after them; on a computer the word processor order stays.
+
 ## 1.5.1 (2026102201)
 
 * "Toolbar on phones and tablets" defaults to the TinyMCE behaviour again (one row that scrolls sideways):

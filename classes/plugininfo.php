@@ -51,10 +51,10 @@ class plugininfo extends plugin implements plugin_with_buttons, plugin_with_conf
     /**
      * @var string[] TinyMCE toolbar modes offered for phones and tablets, the default first.
      *
-     * The TinyMCE default (scrolling) keeps the editing area visible on a small screen,
-     * an opened sliding toolbar or a wrapped one can cover most of it.
+     * With sliding, the editor grows when the "More" drawer is opened (see amd/src/drawer.js),
+     * so the drawer does not cover the editing area. A wrapped toolbar can still cover most of it on a phone.
      */
-    public const MOBILE_TOOLBAR_MODES = ['scrolling', 'sliding', 'wrap'];
+    public const MOBILE_TOOLBAR_MODES = ['sliding', 'scrolling', 'wrap'];
 
     /**
      * Get the buttons this plugin makes available.

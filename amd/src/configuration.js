@@ -22,7 +22,10 @@
  * so they are added back here after that has happened.
  *
  * Toolbar layout, the way word processors have it:
- * history | blocks | fonts | formatting | content | insert | ... the rest of the Moodle toolbar.
+ * history | blocks | fonts | formatting | script | colors | content | insert | ... the rest of the Moodle toolbar.
+ * On phones and tablets, where the first toolbar row has room for a few buttons only,
+ * the most used ones come first: history | formatting | script | colors | blocks | fonts | content | ...
+ * The sections are kept short, as TinyMCE moves whole sections to the "More" drawer and wraps them there.
  * Plugins configured after this one (by name) add their buttons after ours.
  *
  * @module      tiny_fontoptions/configuration
@@ -39,6 +42,7 @@ import {
     backColorItem,
     blocksItem,
     extraPlugins,
+    fontColorItems,
     fontFamilyItem,
     fontSizeItem,
     foreColorItem,
@@ -46,8 +50,22 @@ import {
     justifyMenuItem,
     pluginName,
     removeFormatItem,
+    scriptItems,
     textFormatItems,
 } from './common';
+
+/** @var {boolean} Whether TinyMCE runs on a phone or tablet, where it uses its mobile options. */
+let touchDevice = false;
+
+/**
+ * Remember the device type, once TinyMCE has been loaded.
+ *
+ * @param {TinyMCE} tinyMCE
+ */
+export const setTinyMCE = (tinyMCE) => {
+    const deviceType = tinyMCE.Env.deviceType;
+    touchDevice = deviceType.isPhone() || deviceType.isTablet();
+};
 
 const getMenuConfiguration = (instanceConfig, config) => {
     const format = (instanceConfig.menu?.format?.items ?? '').split(' ');
@@ -111,6 +129,31 @@ const addSection = (toolbar, name, relativeTo, buttons) => {
     return addButtons(toolbar, name, buttons);
 };
 
+/**
+ * Remove buttons from a toolbar section.
+ *
+ * @param {Array} toolbar
+ * @param {string} section
+ * @param {string[]} buttons
+ * @returns {Array}
+ */
+const removeButtons = (toolbar, section, buttons) => toolbar.map((item) => {
+    if (item.name !== section) {
+        return item;
+    }
+    return {...item, items: item.items.filter((button) => !buttons.includes(button))};
+});
+
+/**
+ * Get the first of the given sections which is on the toolbar.
+ *
+ * @param {Array} toolbar
+ * @param {string[]} names
+ * @returns {string}
+ */
+const firstSection = (toolbar, names) =>
+    names.find((name) => toolbar.some((item) => item.name === name)) ?? names[names.length - 1];
+
 const getToolbarConfiguration = (instanceConfig, config) => {
     let toolbar = instanceConfig.toolbar ?? [];
 
@@ -119,26 +162,33 @@ const getToolbarConfiguration = (instanceConfig, config) => {
         toolbar = addButtons(toolbar, 'alignment', [alignJustifyItem]);
     }
 
-    if (config.headings) {
-        toolbar = addSection(toolbar, 'blocks', 'history', [blocksItem]);
-    }
-
-    if (config.showtoolbar) {
-        const relativeTo = toolbar.some((item) => item.name === 'blocks') ? 'blocks' : 'history';
-        toolbar = addSection(toolbar, 'fonts', relativeTo, [fontFamilyItem, fontSizeItem]);
-    }
-
+    // Bold, Italic, Underline, Strikethrough in the Moodle formatting section, then two short sections,
+    // so that no button ends up alone on a row when the toolbar wraps.
     if (config.textformat) {
         toolbar = addButtons(toolbar, 'formatting', textFormatItems, 'italic');
+        toolbar = addSection(toolbar, 'script', 'formatting', scriptItems);
     }
 
-    // After the text formatting, which is where tiny_fontcolor puts its colour buttons.
+    // The tiny_fontcolor buttons are moved there too, so the colours are in the same place whichever plugin adds them.
+    const formatting = toolbar.find((item) => item.name === 'formatting')?.items ?? [];
+    const otherColors = fontColorItems.filter((button) => formatting.includes(button));
+    toolbar = removeButtons(toolbar, 'formatting', otherColors);
+    const colors = [...otherColors];
     if (config.showtoolbar && config.colors) {
-        toolbar = addButtons(toolbar, 'formatting', [foreColorItem, backColorItem]);
+        colors.push(foreColorItem, backColorItem);
     }
-
     if (config.textformat) {
-        toolbar = addButtons(toolbar, 'formatting', [removeFormatItem]);
+        colors.push(removeFormatItem);
+    }
+    toolbar = addSection(toolbar, 'colors', firstSection(toolbar, ['script', 'formatting']), colors);
+
+    // Headings and fonts come before the text formatting on a computer, and after it on phones and tablets.
+    const relativeTo = touchDevice ? firstSection(toolbar, ['colors', 'script', 'formatting']) : 'history';
+    if (config.headings) {
+        toolbar = addSection(toolbar, 'blocks', relativeTo, [blocksItem]);
+    }
+    if (config.showtoolbar) {
+        toolbar = addSection(toolbar, 'fonts', firstSection(toolbar, ['blocks', relativeTo]), [fontFamilyItem, fontSizeItem]);
     }
 
     if (config.insert) {

@@ -25,19 +25,27 @@ Access is controlled by the `tiny/fontoptions:use` capability.
 The toolbar follows the usual word processor order:
 
 ```
-undo redo | headings | font size | B I U S x² x₂ colours clear | links media… | table Ω — | fullscreen | alignment | …
+computer:           undo redo | headings | font size | B I U S | x² x₂ | colours clear | links media… | table Ω — | …
+phones and tablets: undo redo | B I U S | x² x₂ | colours clear | headings | font size | links media… | table Ω — | …
 ```
 
-* `headings` adds the `blocks` section after undo/redo.
-* `showtoolbar` adds the `fonts` section (font family, font size) after it, and the colour buttons
-  at the end of the Bold/Italic section, which is also where `tiny_fontcolor` puts its own.
-* `textformat` adds its buttons right after Italic, and Clear formatting after the colours.
+On phones and tablets the first row has room for a few buttons only, so the most used ones come first.
+The sections are kept short: TinyMCE moves whole sections to the "More" (⋯) drawer and wraps them there.
+
+* `headings` adds the `blocks` section (after undo/redo; on phones and tablets after the colours).
+* `showtoolbar` adds the `fonts` section (font family, font size) after the headings, and the colour buttons
+  to the `colors` section. The `tiny_fontcolor` buttons are moved to that section too.
+* `textformat` adds Underline and Strikethrough after Italic, the `script` section (Superscript, Subscript),
+  and Clear formatting at the end of the `colors` section.
 * `insert` adds the `insert` section after Moodle's `content` section (link, image, media).
   Table and Special character are only added while Moodle loads those TinyMCE plugins.
-* `mobiletoolbar` sets the toolbar mode on phones and tablets: `scrolling` (default, as in TinyMCE:
-  one row that scrolls sideways, which keeps the editing area visible), `sliding` (as on a computer,
-  with the "More" (⋯) button) or `wrap` (all buttons, on as many rows as needed). On a small screen
-  the last two can cover most of the editing area.
+* `mobiletoolbar` sets the toolbar mode on phones and tablets: `sliding` (default, as on a computer,
+  with the "More" (⋯) button), `scrolling` (the TinyMCE default for these devices: one row that scrolls
+  sideways) or `wrap` (all buttons, on as many rows as needed; on a phone they can cover most of the
+  editing area).
+
+With the "More" (⋯) button, the editor grows by the height of the opened drawer, so the editing area
+keeps its size (Moodle gives the editor a fixed height, and the drawer used to take its space).
 
 A button that is already on the toolbar is not added twice. Moodle configures the Tiny plugins in
 alphabetical order, so plugins named after `fontoptions` (h5p, link, media, premium, styles…)

@@ -33,9 +33,12 @@ export default {
     backColorItem: 'backcolor',
     alignJustifyItem: 'alignjustify',
     blocksItem: 'blocks',
-    // More text formatting, shown next to Bold and Italic. Moodle keeps them in the Format menu only.
-    textFormatItems: ['underline', 'strikethrough', 'superscript', 'subscript'],
+    // More text formatting. Moodle keeps them in the Format menu only.
+    textFormatItems: ['underline', 'strikethrough'],
+    scriptItems: ['superscript', 'subscript'],
     removeFormatItem: 'removeformat',
+    // Colour buttons of the tiny_fontcolor plugin, which it puts into the formatting section.
+    fontColorItems: ['tiny_forecolor', 'tiny_backcolor'],
     // Insert buttons with the TinyMCE plugin each one needs (null: built into TinyMCE).
     insertItems: {table: 'table', charmap: 'charmap', hr: null},
     // Moodle removes "Justify" from the Align submenu, so the Format menu gets its own item.

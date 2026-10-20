@@ -27,6 +27,7 @@ import {getPluginMetadata} from 'editor_tiny/utils';
 import {component, pluginName} from './common';
 import {getSetup as getCommandSetup} from './commands';
 import * as Configuration from './configuration';
+import {setup as setupDrawer} from './drawer';
 import {register as registerOptions} from './options';
 
 // eslint-disable-next-line no-async-promise-executor
@@ -44,9 +45,11 @@ export default new Promise(async(resolve) => {
     tinyMCE.PluginManager.add(pluginName, (editor) => {
         registerOptions(editor);
         setupCommands(editor);
+        setupDrawer(editor);
 
         return pluginMetadata;
     });
 
+    Configuration.setTinyMCE(tinyMCE);
     resolve([pluginName, Configuration]);
 });
