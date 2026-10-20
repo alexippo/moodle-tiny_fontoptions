@@ -21,11 +21,12 @@
  * and does not load the advlist and autolink TinyMCE plugins,
  * so they are added back here after that has happened.
  *
- * Toolbar layout, the way word processors have it:
- * history | blocks | fonts | formatting | script | colors | content | insert | ... the rest of the Moodle toolbar.
+ * Toolbar layout, in the TinyMCE default order (headings, then the text formatting):
+ * history | blocks | formatting | script | colors | fonts | content | insert | ... the rest of the Moodle toolbar.
+ * TinyMCE moves whole sections to the "More" drawer, from the end, so the most used ones come first
+ * and the wide font lists after them. The sections are kept short, as the drawer wraps them.
  * On phones and tablets, where the first toolbar row has room for a few buttons only,
- * the most used ones come first: history | formatting | script | colors | blocks | fonts | content | ...
- * The sections are kept short, as TinyMCE moves whole sections to the "More" drawer and wraps them there.
+ * the text formatting comes first: history | formatting | script | colors | blocks | fonts | content | ...
  * Plugins configured after this one (by name) add their buttons after ours.
  *
  * @module      tiny_fontoptions/configuration
@@ -182,13 +183,15 @@ const getToolbarConfiguration = (instanceConfig, config) => {
     }
     toolbar = addSection(toolbar, 'colors', firstSection(toolbar, ['script', 'formatting']), colors);
 
-    // Headings and fonts come before the text formatting on a computer, and after it on phones and tablets.
-    const relativeTo = touchDevice ? firstSection(toolbar, ['colors', 'script', 'formatting']) : 'history';
+    // The headings come before the text formatting on a computer, and after it on phones and tablets.
+    // The font lists come after both: they are wide and needed less often.
+    const afterFormatting = firstSection(toolbar, ['colors', 'script', 'formatting']);
     if (config.headings) {
-        toolbar = addSection(toolbar, 'blocks', relativeTo, [blocksItem]);
+        toolbar = addSection(toolbar, 'blocks', touchDevice ? afterFormatting : 'history', [blocksItem]);
     }
     if (config.showtoolbar) {
-        toolbar = addSection(toolbar, 'fonts', firstSection(toolbar, ['blocks', relativeTo]), [fontFamilyItem, fontSizeItem]);
+        const fontsAfter = touchDevice ? firstSection(toolbar, ['blocks', afterFormatting]) : afterFormatting;
+        toolbar = addSection(toolbar, 'fonts', fontsAfter, [fontFamilyItem, fontSizeItem]);
     }
 
     if (config.insert) {

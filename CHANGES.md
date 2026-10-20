@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.6.1 (2026102203)
+
+* On a computer the toolbar follows the TinyMCE default order: headings, then Bold, Italic, Underline,
+  Strikethrough, and the font lists after the text formatting. With the font lists before them,
+  a plugin which adds a button to the formatting section (such as tiny_styles) could push Bold and Italic
+  into the "More" drawer, as TinyMCE moves whole sections there.
+
 ## 1.6.0 (2026102202)
 
 * The editor grows when the "More" (⋯) drawer of the toolbar is opened, so the drawer no longer covers

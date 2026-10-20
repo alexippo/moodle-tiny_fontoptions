@@ -25,16 +25,19 @@ Access is controlled by the `tiny/fontoptions:use` capability.
 The toolbar follows the usual word processor order:
 
 ```
-computer:           undo redo | headings | font size | B I U S | x² x₂ | colours clear | links media… | table Ω — | …
+computer:           undo redo | headings | B I U S | x² x₂ | colours clear | font size | links media… | table Ω — | …
 phones and tablets: undo redo | B I U S | x² x₂ | colours clear | headings | font size | links media… | table Ω — | …
 ```
 
-On phones and tablets the first row has room for a few buttons only, so the most used ones come first.
-The sections are kept short: TinyMCE moves whole sections to the "More" (⋯) drawer and wraps them there.
+On a computer this is the TinyMCE default order (`undo redo | styles | bold italic`). TinyMCE moves whole
+sections to the "More" (⋯) drawer, from the end, so the most used ones come first and the wide font lists
+after them; the sections are kept short, as the drawer wraps them. On phones and tablets the first row has
+room for a few buttons only, so the text formatting comes first.
 
 * `headings` adds the `blocks` section (after undo/redo; on phones and tablets after the colours).
-* `showtoolbar` adds the `fonts` section (font family, font size) after the headings, and the colour buttons
-  to the `colors` section. The `tiny_fontcolor` buttons are moved to that section too.
+* `showtoolbar` adds the `fonts` section (font family, font size) after the text formatting (on phones and
+  tablets after the headings), and the colour buttons to the `colors` section.
+  The `tiny_fontcolor` buttons are moved to that section too.
 * `textformat` adds Underline and Strikethrough after Italic, the `script` section (Superscript, Subscript),
   and Clear formatting at the end of the `colors` section.
 * `insert` adds the `insert` section after Moodle's `content` section (link, image, media).
