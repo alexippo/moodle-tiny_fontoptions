@@ -48,8 +48,13 @@ class plugininfo extends plugin implements plugin_with_buttons, plugin_with_conf
     /** @var string Default font sizes, separated by spaces. */
     public const DEFAULT_FONTSIZES = '8pt 10pt 12pt 14pt 16pt 18pt 24pt 36pt';
 
-    /** @var string[] TinyMCE toolbar modes offered for phones and tablets. */
-    public const MOBILE_TOOLBAR_MODES = ['sliding', 'wrap', 'scrolling'];
+    /**
+     * @var string[] TinyMCE toolbar modes offered for phones and tablets, the default first.
+     *
+     * The TinyMCE default (scrolling) keeps the editing area visible on a small screen,
+     * an opened sliding toolbar or a wrapped one can cover most of it.
+     */
+    public const MOBILE_TOOLBAR_MODES = ['scrolling', 'sliding', 'wrap'];
 
     /**
      * Get the buttons this plugin makes available.

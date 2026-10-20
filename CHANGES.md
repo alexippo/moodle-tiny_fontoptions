@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.5.1 (2026102201)
+
+* "Toolbar on phones and tablets" defaults to the TinyMCE behaviour again (one row that scrolls sideways):
+  on a phone, an opened "More" toolbar covered most of the editing area.
+
 ## 1.5.0 (2026102200)
 
 * New setting "Toolbar on phones and tablets". TinyMCE puts all buttons in one side-scrolling row on these devices;

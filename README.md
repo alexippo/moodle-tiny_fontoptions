@@ -34,9 +34,10 @@ undo redo | headings | font size | B I U S x² x₂ colours clear | links media�
 * `textformat` adds its buttons right after Italic, and Clear formatting after the colours.
 * `insert` adds the `insert` section after Moodle's `content` section (link, image, media).
   Table and Special character are only added while Moodle loads those TinyMCE plugins.
-* `mobiletoolbar` sets the toolbar mode on phones and tablets: `sliding` (default, as on a computer,
-  with the "More" (⋯) button), `wrap` (all buttons, on as many rows as needed) or `scrolling`
-  (the TinyMCE default for these devices: one row that scrolls sideways).
+* `mobiletoolbar` sets the toolbar mode on phones and tablets: `scrolling` (default, as in TinyMCE:
+  one row that scrolls sideways, which keeps the editing area visible), `sliding` (as on a computer,
+  with the "More" (⋯) button) or `wrap` (all buttons, on as many rows as needed). On a small screen
+  the last two can cover most of the editing area.
 
 A button that is already on the toolbar is not added twice. Moodle configures the Tiny plugins in
 alphabetical order, so plugins named after `fontoptions` (h5p, link, media, premium, styles…)

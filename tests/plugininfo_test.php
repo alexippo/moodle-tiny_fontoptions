@@ -151,7 +151,7 @@ final class plugininfo_test extends advanced_testcase {
         $this->resetAfterTest();
 
         unset_config('mobiletoolbar', 'tiny_fontoptions');
-        $this->assertSame('sliding', plugininfo::get_mobile_toolbar_mode());
+        $this->assertSame('scrolling', plugininfo::get_mobile_toolbar_mode());
 
         set_config('mobiletoolbar', 'wrap', 'tiny_fontoptions');
         $this->assertSame('wrap', plugininfo::get_mobile_toolbar_mode());
