@@ -83,6 +83,10 @@ Moodle leaves these controls out of the toolbar on purpose, so think about who r
 * Headings start at Heading 3, as in Moodle core, so the page heading structure stays correct
   for screen readers. Use headings for structure rather than a bigger font size.
 
+Dark mode: Moodle 5.3 and later use the dark TinyMCE skin in dark mode. Before 5.3, dark mode plugins (such as
+local_boost_dark) make the toolbar buttons dark but keep the light skin; when the buttons are dark, the text of the
+headings and font lists is made light so that it stays readable.
+
 Every feature can be switched off in the settings, and the `tiny/fontoptions:use` capability can limit the plugin
 to some roles, for example teachers only. Moodle's own Accessibility checker (tiny_accessibilitychecker) still
 reports low contrast and other issues in the edited text.

@@ -25,8 +25,8 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'tiny_fontoptions';
-$plugin->version = 2026102206;
-$plugin->release = '1.7.1';
+$plugin->version = 2026102207;
+$plugin->release = '1.7.2';
 $plugin->requires = 2024100700;
 $plugin->supported = [405, 503];
 $plugin->maturity = MATURITY_STABLE;

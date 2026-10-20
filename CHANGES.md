@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.7.2 (2026102207)
+
+* The text of the headings and font lists was dark on a dark toolbar, with dark mode plugins for Moodle
+  before 5.3 (such as local_boost_dark), which make the buttons dark but keep the light TinyMCE skin.
+  It is made light when the toolbar buttons turn out to be dark. Moodle 5.3 and later pick the dark TinyMCE skin
+  themselves in dark mode, which already has light text, so their editor is left alone.
+
 ## 1.7.1 (2026102206)
 
 * "Show all toolbar buttons" did not open the toolbar: the drawer was opened on the editor init event,

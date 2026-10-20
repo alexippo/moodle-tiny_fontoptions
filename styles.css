@@ -1,0 +1,4 @@
+/* The headings and font lists on a dark toolbar with the light TinyMCE skin, see amd/src/colours.js. */
+.tox.tiny-fontoptions-dark-toolbar .tox-tbtn__select-label {
+    color: #e9ecef;
+}

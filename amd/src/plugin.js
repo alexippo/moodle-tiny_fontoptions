@@ -27,6 +27,7 @@ import {getPluginMetadata} from 'editor_tiny/utils';
 import {component, pluginName} from './common';
 import {getSetup as getCommandSetup} from './commands';
 import * as Configuration from './configuration';
+import {setup as setupColours} from './colours';
 import {setup as setupDrawer} from './drawer';
 import {register as registerOptions} from './options';
 
@@ -46,6 +47,7 @@ export default new Promise(async(resolve) => {
         registerOptions(editor);
         setupCommands(editor);
         setupDrawer(editor, tinyMCE);
+        setupColours(editor);
 
         return pluginMetadata;
     });
