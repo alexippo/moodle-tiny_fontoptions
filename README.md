@@ -17,6 +17,8 @@ and does not load some of its plugins. This plugin brings them back:
 
 Access is controlled by the `tiny/fontoptions:use` capability.
 
+![The editor toolbar with the plugin enabled](screenshots/toolbar.jpg)
+
 ## Toolbar layout
 
 The toolbar follows the usual word processor order:
@@ -46,6 +48,18 @@ Not included on purpose:
 If `tiny_fontfamily` or `tiny_fontsize` are enabled, their items appear twice;
 the settings page shows a warning. Disable them in
 Site administration > Plugins > Text editors > TinyMCE editor > General settings.
+
+## Screenshots
+
+| Headings | Font family | Font size |
+|---|---|---|
+| ![Headings](screenshots/headings.jpg) | ![Font family](screenshots/font-family.jpg) | ![Font size](screenshots/font-size.jpg) |
+
+Settings:
+
+![Font settings](screenshots/settings-fonts.jpg)
+
+![Toolbar settings](screenshots/settings-toolbar.jpg)
 
 ## Requirements
 
