@@ -141,7 +141,59 @@ final class plugininfo_test extends advanced_testcase {
         $this->assertEqualsCanonicalizing([
             'fontfamilies', 'fontsizes', 'showtoolbar', 'colors', 'justify', 'headings', 'textformat', 'insert',
             'advlist', 'autolink', 'advlistnumberstyles', 'mobiletoolbar', 'expandtoolbar',
+            'toolbarorder', 'toolbarorderphone',
         ], array_keys($config));
+    }
+
+    /**
+     * Test the toolbar order settings passed to the editor, and to the hidden editor of these settings.
+     */
+    public function test_get_plugin_configuration_for_context_toolbar_order(): void {
+        $this->resetAfterTest();
+
+        set_config('toolbarorder', "Undo redo\nbold", 'tiny_fontoptions');
+        set_config('expandtoolbar', 1, 'tiny_fontoptions');
+        $context = \context_system::instance();
+
+        $config = plugininfo::get_plugin_configuration_for_context($context, [], []);
+        $this->assertSame('undo redo | bold', $config['toolbarorder']);
+        $this->assertSame('', $config['toolbarorderphone']);
+        $this->assertArrayNotHasKey('preview', $config);
+
+        $config = plugininfo::get_plugin_configuration_for_context($context, [plugininfo::PREVIEW_OPTION => 'phone'], []);
+        $this->assertSame('phone', $config['preview']);
+        $this->assertFalse($config['expandtoolbar']);
+        $this->assertArrayNotHasKey('toolbarorder', $config);
+        $this->assertArrayNotHasKey('toolbarorderphone', $config);
+    }
+
+    /**
+     * Test converting a toolbar order setting into the format read by the editor.
+     *
+     * @dataProvider format_toolbar_order_provider
+     * @param string|false $setting
+     * @param string $expected
+     */
+    public function test_format_toolbar_order($setting, string $expected): void {
+        $this->assertSame($expected, plugininfo::format_toolbar_order($setting));
+    }
+
+    /**
+     * Data provider for test_format_toolbar_order.
+     *
+     * @return array
+     */
+    public static function format_toolbar_order_provider(): array {
+        return [
+            'Not set' => [false, ''],
+            'Empty' => ["  \n ", ''],
+            'Lines' => ["undo redo\r\n\r\n  bold   italic \n*", 'undo redo | bold italic | *'],
+            'Bars' => ['undo redo | bold italic', 'undo redo | bold italic'],
+            'Lower case' => ['Bold Tiny_Media_Image', 'bold tiny_media_image'],
+            'Duplicates keep their first place' => ["bold italic\nitalic\n*\n*", 'bold italic | *'],
+            'Star gets a section of its own' => ['bold * italic', 'bold | * | italic'],
+            'Invalid names are skipped' => ['bold <b> it@lic tiny_h5p-x', 'bold tiny_h5p-x'],
+        ];
     }
 
     /**

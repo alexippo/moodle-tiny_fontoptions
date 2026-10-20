@@ -56,6 +56,33 @@ keeps its size (Moodle gives the editor a fixed height, and the drawer used to t
 on a computer or tablet; the "More" button still collapses it. It is not opened on phones, where the extra
 rows would take half of the screen.
 
+### Your own toolbar order
+
+`toolbarorder` (computer and tablet) and `toolbarorderphone` (phone) put the toolbar into any order,
+with the buttons of other Tiny plugins too. Empty (the default) keeps the order above. Otherwise one section
+per line, button names separated by spaces:
+
+```
+undo redo
+bold italic underline strikethrough
+alignleft aligncenter alignright alignjustify
+forecolor backcolor removeformat
+bullist numlist
+*
+```
+
+A button which is not listed is left out of the toolbar (it stays in the menus); the line `*` puts all such
+buttons there instead, in their usual sections, so the buttons of plugins installed later show up too.
+Buttons which an editor does not have (a disabled plugin, a capability the user lacks) are skipped.
+The order is applied when the editor is set up, after every plugin has added its buttons.
+
+Below each setting are the default order on the site, with a button to copy it into the field, and the list
+of the buttons for the toolbar and the menu commands (not the context toolbar ones, such as table rows or Heading 1–6). Button names are only known in the browser, so the settings page loads a hidden
+editor with the site configuration to read them.
+On the page with all TinyMCE settings (`admin/category.php?category=editortiny`) Moodle prints a script
+before the page doctype, and TinyMCE does not start in that quirks mode, so the settings link to the plugin
+settings page there.
+
 A button that is already on the toolbar is not added twice. Moodle configures the Tiny plugins in
 alphabetical order, so plugins named after `fontoptions` (h5p, link, media, premium, styles…)
 add their buttons after these changes; their positions are left as they are.

@@ -43,6 +43,9 @@ const pluginOptions = {
     insert: {processor: 'boolean', "default": false},
     mobiletoolbar: {processor: 'string', "default": ''},
     expandtoolbar: {processor: 'boolean', "default": false},
+    toolbarorder: {processor: 'string', "default": ''},
+    toolbarorderphone: {processor: 'string', "default": ''},
+    preview: {processor: 'string', "default": ''},
 };
 
 /**

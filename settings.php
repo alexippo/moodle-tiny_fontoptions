@@ -109,4 +109,8 @@ if ($ADMIN->fulltree) {
         plugininfo::MOBILE_TOOLBAR_MODES[0],
         $modes
     ));
+
+    foreach (array_keys(plugininfo::TOOLBAR_ORDERS) as $device) {
+        $settings->add(new \tiny_fontoptions\admin\setting_toolbarorder($device));
+    }
 }

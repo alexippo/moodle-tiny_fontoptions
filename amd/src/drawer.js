@@ -31,6 +31,22 @@ import {pluginName} from './common';
 const expandToolbarName = getPluginOptionName(pluginName, 'expandtoolbar');
 
 /**
+ * Open or close the toolbar drawer, without moving the focus.
+ *
+ * Without skipping the focus TinyMCE focuses the first button in the drawer.
+ * TinyMCE 6 and 7 (Moodle 4.5-5.1) take skipFocus as the command value; TinyMCE 8 takes skip_focus
+ * in the command arguments and reports skipFocus as deprecated.
+ *
+ * @param {TinyMCE.Editor} editor
+ * @param {TinyMCE} tinyMCE
+ */
+const toggleDrawer = (editor, tinyMCE) => {
+    const value = parseInt(tinyMCE.majorVersion) < 8 ? {skipFocus: true} : undefined;
+    // eslint-disable-next-line camelcase
+    editor.execCommand('ToggleToolbarDrawer', false, value, {skip_focus: true});
+};
+
+/**
  * Make the editor grow and shrink with its toolbar drawer.
  *
  * @param {TinyMCE.Editor} editor
@@ -66,6 +82,32 @@ export const setup = (editor, tinyMCE) => {
                 update();
             }
         });
+        // TinyMCE moves the focus to the first button in the drawer it opens, and to the "More" button when it closes it.
+        // That is meant for the keyboard. On a tap or click the focus goes back to the text, if it was there
+        // (so a phone keeps its on-screen keyboard), or else stays on the "More" button.
+        // Only a pointer gives pointerdown, which comes before the focus moves.
+        let pointer = null;
+        const container = editor.getContainer();
+        container.addEventListener('pointerdown', (e) => {
+            const button = e.target.closest?.('[data-mce-name="overflow-button"]');
+            pointer = button ? {button, text: editor.hasFocus()} : null;
+        }, true);
+        container.addEventListener('keydown', () => {
+            pointer = null;
+        }, true);
+        container.addEventListener('focusin', (e) => {
+            if (!pointer || e.target.closest('.tox-edit-area')) {
+                return;
+            }
+            const {button, text} = pointer;
+            if (text) {
+                pointer = null;
+                editor.focus();
+            } else if (e.target !== button && e.target.closest('.tox-toolbar__overflow')) {
+                pointer = null;
+                button.focus();
+            }
+        });
     });
 
     // Show all buttons, except on phones, where the extra rows would take half of the screen.
@@ -77,12 +119,7 @@ export const setup = (editor, tinyMCE) => {
             return;
         }
         if (editor.options.get(expandToolbarName) && !tinyMCE.Env.deviceType.isPhone()) {
-            // Without skipping the focus TinyMCE focuses the first button in the drawer.
-            // TinyMCE 6 and 7 (Moodle 4.5-5.1) take skipFocus as the command value; TinyMCE 8 takes skip_focus
-            // in the command arguments and reports skipFocus as deprecated.
-            const value = parseInt(tinyMCE.majorVersion) < 8 ? {skipFocus: true} : undefined;
-            // eslint-disable-next-line camelcase
-            editor.execCommand('ToggleToolbarDrawer', false, value, {skip_focus: true});
+            toggleDrawer(editor, tinyMCE);
         }
     }));
 };

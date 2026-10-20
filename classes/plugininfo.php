@@ -56,6 +56,16 @@ class plugininfo extends plugin implements plugin_with_buttons, plugin_with_conf
      */
     public const MOBILE_TOOLBAR_MODES = ['sliding', 'scrolling', 'wrap'];
 
+    /** @var string[] Toolbar order settings, by the device they are for. */
+    public const TOOLBAR_ORDERS = ['desktop' => 'toolbarorder', 'phone' => 'toolbarorderphone'];
+
+    /**
+     * @var string Editor option for the hidden editor of a toolbar order setting: the device it shows the toolbar for.
+     *
+     * That editor gets the default toolbar order, so the setting can show it and the buttons there are on the site.
+     */
+    public const PREVIEW_OPTION = 'tiny_fontoptions_preview';
+
     /**
      * Get the buttons this plugin makes available.
      *
@@ -110,7 +120,7 @@ class plugininfo extends plugin implements plugin_with_buttons, plugin_with_conf
         array $fpoptions,
         ?editor $editor = null
     ): array {
-        return [
+        $config = [
             'fontfamilies' => self::format_font_families(get_config('tiny_fontoptions', 'fontfamilies')),
             'fontsizes' => self::format_font_sizes(get_config('tiny_fontoptions', 'fontsizes')),
             'showtoolbar' => (bool) get_config('tiny_fontoptions', 'showtoolbar'),
@@ -125,6 +135,17 @@ class plugininfo extends plugin implements plugin_with_buttons, plugin_with_conf
             'autolink' => (bool) get_config('tiny_fontoptions', 'autolink'),
             'advlistnumberstyles' => self::get_advlist_number_styles(),
         ];
+
+        $preview = $options[self::PREVIEW_OPTION] ?? '';
+        if (isset(self::TOOLBAR_ORDERS[$preview])) {
+            $config['preview'] = $preview;
+            $config['expandtoolbar'] = false;
+        } else {
+            foreach (self::TOOLBAR_ORDERS as $name) {
+                $config[$name] = self::format_toolbar_order(get_config('tiny_fontoptions', $name));
+            }
+        }
+        return $config;
     }
 
     /**
@@ -228,5 +249,46 @@ class plugininfo extends plugin implements plugin_with_buttons, plugin_with_conf
             }
         }
         return implode(' ', $sizes);
+    }
+
+    /**
+     * Convert a toolbar order setting into the format read by amd/src/configuration.js.
+     *
+     * One toolbar section per line (or separated by "|"), buttons separated by spaces.
+     * "*" stands for the buttons which are not listed, and is kept on a section of its own.
+     * A button listed twice keeps its first place; names which cannot be TinyMCE buttons are skipped.
+     *
+     * @param string|false $setting
+     * @return string e.g. "undo redo | bold italic | *", or an empty string for the default order.
+     */
+    public static function format_toolbar_order($setting): string {
+        if ($setting === false) {
+            return '';
+        }
+
+        $sections = [];
+        $seen = [];
+        foreach (preg_split('/\R|\|/', strtolower($setting)) as $line) {
+            $section = [];
+            foreach (preg_split('/\s+/', $line, -1, PREG_SPLIT_NO_EMPTY) as $button) {
+                if (isset($seen[$button]) || !preg_match('/^([a-z0-9_-]+|\*)$/', $button)) {
+                    continue;
+                }
+                $seen[$button] = true;
+                if ($button === '*') {
+                    if ($section) {
+                        $sections[] = $section;
+                    }
+                    $sections[] = ['*'];
+                    $section = [];
+                } else {
+                    $section[] = $button;
+                }
+            }
+            if ($section) {
+                $sections[] = $section;
+            }
+        }
+        return implode(' | ', array_map(fn($section) => implode(' ', $section), $sections));
     }
 }

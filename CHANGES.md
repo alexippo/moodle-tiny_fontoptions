@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.8.0 (2026102300)
+
+* New settings "Toolbar order (computer and tablet)" and "Toolbar order (phone)": the toolbar sections and buttons
+  in any order, with the buttons of other Tiny plugins too, one section per line. Unlisted buttons are left out,
+  or put where a line with "*" is. Empty (the default) keeps the default order.
+  Below each setting are the default order on the site, with a button to copy it into the field,
+  and the buttons of the toolbar and the menus (not the ones of the context toolbars, such as table cells),
+  read from a hidden editor with the site configuration; unknown names are pointed out.
+* Opening or closing the "More" (⋯) drawer with a tap or click no longer moves the focus to its first button
+  (such as Text colour) or to the "More" button: the cursor stays in the text, so a phone keeps its on-screen keyboard.
+  With the keyboard TinyMCE still moves the focus into the drawer.
+
 ## 1.7.4 (2026102209)
 
 * On phones, Bold, Italic, Underline and Strikethrough were in the "More" drawer when another plugin

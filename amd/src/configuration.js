@@ -29,12 +29,14 @@
  * On phones, where the first toolbar row has room for a few buttons only,
  * the text formatting comes first: history | formatting | script | colors | lists | blocks | fonts | content | ...
  * Plugins configured after this one (by name) add their buttons after ours.
+ * The toolbar order settings, when set, then rearrange the whole toolbar, with the buttons of all plugins.
  *
  * @module      tiny_fontoptions/configuration
  * @copyright   2026 Donetsk Regional Institute of Postgraduate Pedagogical Education <donoippo@gmail.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+import {getPluginOptionName} from 'editor_tiny/options';
 import {
     addMenubarItem,
     addToolbarSection,
@@ -67,6 +69,14 @@ let phone = false;
 export const setTinyMCE = (tinyMCE) => {
     phone = tinyMCE.Env.deviceType.isPhone();
 };
+
+/**
+ * Whether to lay out the toolbar for a phone.
+ *
+ * @param {string} preview The device of the hidden editor of a toolbar order setting, or an empty string.
+ * @returns {boolean}
+ */
+const isPhone = (preview) => (preview ? preview === 'phone' : phone);
 
 const getMenuConfiguration = (instanceConfig, config) => {
     const format = (instanceConfig.menu?.format?.items ?? '').split(' ');
@@ -175,6 +185,7 @@ const firstSection = (toolbar, names) =>
 
 const getToolbarConfiguration = (instanceConfig, config) => {
     let toolbar = instanceConfig.toolbar ?? [];
+    const onPhone = isPhone(config.preview);
 
     if (config.justify) {
         // Moodle removes this button from the alignment section.
@@ -208,10 +219,10 @@ const getToolbarConfiguration = (instanceConfig, config) => {
     // The font lists come after both: they are wide and needed less often.
     const afterFormatting = firstSection(toolbar, ['lists', 'colors', 'script', 'formatting']);
     if (config.headings) {
-        toolbar = addSection(toolbar, 'blocks', phone ? afterFormatting : 'history', [blocksItem]);
+        toolbar = addSection(toolbar, 'blocks', onPhone ? afterFormatting : 'history', [blocksItem]);
     }
     if (config.showtoolbar) {
-        const fontsAfter = phone ? firstSection(toolbar, ['blocks', afterFormatting]) : afterFormatting;
+        const fontsAfter = onPhone ? firstSection(toolbar, ['blocks', afterFormatting]) : afterFormatting;
         toolbar = addSection(toolbar, 'fonts', fontsAfter, [fontFamilyItem, fontSizeItem]);
     }
 
@@ -240,26 +251,79 @@ const getPluginsConfiguration = (instanceConfig, config) => {
  *
  * Plugins configured after this one (such as tiny_styles with its wide list) add them to the end of the section
  * with Bold, Italic, Underline and Strikethrough, which then did not fit on the first toolbar row of a phone,
- * so TinyMCE put the whole section into the "More" drawer. This runs when the editor is set up,
- * once every plugin has been configured.
+ * so TinyMCE put the whole section into the "More" drawer.
  *
- * @param {TinyMCE.Editor} editor
+ * @param {Array} toolbar
+ * @returns {Array}
  */
-export const setupToolbar = (editor) => {
-    const toolbar = editor.options.get('toolbar');
-    if (!phone || !Array.isArray(toolbar)) {
-        return;
-    }
+const moveFormattingExtra = (toolbar) => {
     const formatting = toolbar.find((item) => item.name === 'formatting');
     const own = ['bold', 'italic', ...textFormatItems];
     const others = (formatting?.items ?? []).filter((button) => !own.includes(button));
     if (!others.length) {
+        return toolbar;
+    }
+    const result = removeButtons(toolbar, 'formatting', others);
+    return addSection(result, 'formattingextra', firstSection(result, ['blocks', 'lists', 'colors', 'script', 'formatting']),
+        others);
+};
+
+/**
+ * Put the toolbar into the order of a toolbar order setting.
+ *
+ * The buttons which are not listed keep their sections in place of "*", or are left out without it.
+ * Listed buttons which the editor does not have are skipped by TinyMCE.
+ *
+ * @param {Array} toolbar
+ * @param {string} order Sections separated by "|", buttons by spaces, see plugininfo::format_toolbar_order().
+ * @returns {Array}
+ */
+export const applyOrder = (toolbar, order) => {
+    const sections = order.split('|')
+        .map((section) => section.trim().split(/\s+/).filter(Boolean))
+        .filter((items) => items.length);
+    const listed = sections.flat();
+    const rest = toolbar
+        .map((item) => ({...item, items: item.items.filter((button) => !listed.includes(button.toLowerCase()))}))
+        .filter((item) => item.items.length);
+
+    // A listed section is named after the section its first button comes from; the names stay unique.
+    const sectionOf = (button) =>
+        toolbar.find((item) => item.items.some((other) => other.toLowerCase() === button))?.name ?? 'custom';
+    const names = new Set();
+    const uniqueName = (name) => {
+        let result = name;
+        for (let i = 2; names.has(result); i++) {
+            result = `${name}${i}`;
+        }
+        names.add(result);
+        return result;
+    };
+
+    return sections
+        .flatMap((items) => (items[0] === '*' ? rest : [{name: sectionOf(items[0]), items}]))
+        .map((item) => ({...item, name: uniqueName(item.name)}));
+};
+
+/**
+ * Finish the toolbar once every plugin has been configured: this runs when the editor is set up.
+ *
+ * @param {TinyMCE.Editor} editor
+ */
+export const setupToolbar = (editor) => {
+    let toolbar = editor.options.get('toolbar');
+    if (!Array.isArray(toolbar)) {
         return;
     }
-    let result = removeButtons(toolbar, 'formatting', others);
-    result = addSection(result, 'formattingextra', firstSection(result, ['blocks', 'lists', 'colors', 'script', 'formatting']),
-        others);
-    editor.options.set('toolbar', result);
+    const onPhone = isPhone(editor.options.get(getPluginOptionName(pluginName, 'preview')));
+    if (onPhone) {
+        toolbar = moveFormattingExtra(toolbar);
+    }
+    const order = editor.options.get(getPluginOptionName(pluginName, onPhone ? 'toolbarorderphone' : 'toolbarorder'));
+    if (order) {
+        toolbar = applyOrder(toolbar, order);
+    }
+    editor.options.set('toolbar', toolbar);
 };
 
 export const configure = (instanceConfig, options) => {
