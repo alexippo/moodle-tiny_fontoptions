@@ -19,7 +19,7 @@ and does not load some of its plugins. This plugin brings them back:
 
 Access is controlled by the `tiny/fontoptions:use` capability.
 
-![The editor toolbar with the plugin enabled](screenshots/toolbar.jpg)
+![The editor toolbar on a computer, with all buttons visible](screenshots/toolbar.jpg)
 
 ## Toolbar layout
 
@@ -92,6 +92,14 @@ to some roles, for example teachers only. Moodle's own Accessibility checker (ti
 reports low contrast and other issues in the edited text.
 
 ## Screenshots
+
+Dark mode (Moodle 5.2 with local_boost_dark):
+
+![Dark mode](screenshots/dark-mode.jpg)
+
+| Phone | Phone, "More" opened |
+|---|---|
+| ![Phone: the most used buttons first](screenshots/phone.jpg) | ![Phone: More opened, the editor grows](screenshots/phone-more.jpg) |
 
 | Headings | Font family | Font size |
 |---|---|---|
