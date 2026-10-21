@@ -38,7 +38,7 @@ export default {
     scriptItems: ['superscript', 'subscript'],
     removeFormatItem: 'removeformat',
     // Insert buttons with the TinyMCE plugin each one needs (null: built into TinyMCE).
-    insertItems: {table: 'table', charmap: 'charmap', hr: null},
+    insertItems: {emoticons: 'emoticons', table: 'table', charmap: 'charmap', hr: null},
     // Moodle removes "Justify" from the Align submenu, so the Format menu gets its own item.
     justifyMenuItem: `${component}_justify`,
     // TinyMCE plugins which ship with Moodle but are not loaded by it.

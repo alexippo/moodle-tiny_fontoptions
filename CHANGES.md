@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.9.3 (2026102501)
+
+* The default orders are the ones used on our sites, with the buttons of a standard Moodle only: Styles (tiny_styles),
+  MathType and ChemType (tiny_wiris) and the tiny_fontcolor buttons are no longer placed, they follow with the other
+  buttons ("*").
+* The setting "Insert buttons" also puts Emojis on the toolbar (Moodle has it in the Insert menu only),
+  so the default order has it after Superscript and Subscript.
+* The default order below the toolbar order settings is shown as it is, with "*" for the other buttons,
+  instead of with the buttons that "*" brings on that site. "Copy into the field" copies it so.
+
 ## 1.9.2 (2026102500)
 
 * The list of buttons below the toolbar order settings now also has the buttons of Moodle plugins which another

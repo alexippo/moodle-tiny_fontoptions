@@ -58,16 +58,15 @@ import {
  * and the wide lists (fonts, headings) after them. The sections are kept short, as the drawer wraps them,
  * and a section wider than a phone screen would be split, so there the wide headings list only shares its section
  * with the alignment buttons, and the lists (their split buttons are wider) get a section of their own.
- * The buttons of other plugins are placed as well, when the site has them; all other buttons follow ("*").
+ * Only the buttons of a standard Moodle are placed; the buttons of other plugins follow with all others ("*").
  */
-const defaultOrders = {
-    desktop: 'undo redo | bold italic underline strikethrough'
-        + ' | tiny_forecolor tiny_backcolor forecolor backcolor tiny_styles_button removeformat'
-        + ' | superscript subscript emoticons charmap tiny_equation tiny_mce_wiris_formulaeditor'
-        + ' tiny_mce_wiris_formulaeditorchemistry | fontfamily fontsize | blocks outdent indent bullist numlist'
-        + ' | alignleft aligncenter alignright alignjustify | tiny_link_link tiny_link_unlink tiny_noautolink'
-        + ' | tiny_media_image tiny_media_video tiny_h5p | table hr | fullscreen | *',
-    phone: 'undo redo | bold italic underline strikethrough | tiny_forecolor tiny_backcolor forecolor backcolor removeformat'
+export const defaultOrders = {
+    desktop: 'undo redo | bold italic underline strikethrough | forecolor backcolor removeformat'
+        + ' | superscript subscript emoticons charmap tiny_equation | fontfamily fontsize'
+        + ' | blocks outdent indent bullist numlist | alignleft aligncenter alignright alignjustify'
+        + ' | tiny_link_link tiny_link_unlink tiny_noautolink | tiny_media_image tiny_media_video tiny_h5p | table hr'
+        + ' | fullscreen | *',
+    phone: 'undo redo | bold italic underline strikethrough | forecolor backcolor removeformat'
         + ' | superscript subscript emoticons charmap | fontfamily fontsize'
         + ' | blocks alignleft aligncenter alignright alignjustify | bullist numlist outdent indent'
         + ' | tiny_link_link tiny_link_unlink tiny_noautolink | tiny_media_image tiny_media_video tiny_h5p | table hr'

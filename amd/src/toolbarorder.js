@@ -14,7 +14,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Toolbar order settings: the default order and the buttons on the site, read from a hidden editor.
+ * Toolbar order settings: the default order and the buttons in the editor, read from a hidden editor.
  *
  * Each Tiny plugin registers its buttons in the browser, so only an editor with the site configuration knows them.
  * The setting (classes/admin/setting_toolbarorder.php) loads one, which gets the default order
@@ -26,9 +26,11 @@
  */
 
 import {getTinyMCE} from 'editor_tiny/loader';
+import {getPluginOptionName} from 'editor_tiny/options';
 import {getString} from 'core/str';
 import {saveCancelPromise} from 'core/notification';
-import {component} from './common';
+import {component, pluginName} from './common';
+import {defaultOrders} from './configuration';
 
 /** @var {Object} Controls built into the TinyMCE theme, which are not in its button registry, with their tooltips. */
 const builtInButtons = {
@@ -101,12 +103,17 @@ export const init = async(fieldId, previewId, loadEditor) => {
         buttons[name] = typeof label === 'string' ? label : '';
     });
 
-    // Buttons which this editor does not have are skipped by TinyMCE, so they are left out here too.
-    const order = editor.options.get('toolbar')
-        .map((section) => section.items.filter((button) => buttons[button.toLowerCase()] !== undefined))
+    // The buttons on the toolbar of this editor, which has the default order. TinyMCE skips the ones it does not have.
+    // TinyMCE keeps the button names in lower case, while plugins may use capitals (such as tiny_mce_wiris_formulaEditor).
+    const onToolbar = new Set(editor.options.get('toolbar').flatMap((section) => section.items)
+        .map((name) => name.toLowerCase())
+        .filter((name) => buttons[name] !== undefined));
+
+    // The default order without the buttons which this site does not have; "*" stands for the buttons of other plugins.
+    const order = defaultOrders[editor.options.get(getPluginOptionName(pluginName, 'preview'))].split('|')
+        .map((section) => section.trim().split(/\s+/).filter((name) => name === '*' || onToolbar.has(name)))
         .filter((items) => items.length)
         .map((items) => items.join(' '))
-        .concat('*')
         .join('\n');
     preview.querySelector('[data-region="order"]').textContent = order;
 
@@ -114,10 +121,7 @@ export const init = async(fieldId, previewId, loadEditor) => {
     // (named after their component), which another plugin may have taken off the toolbar and the menus
     // (tiny_wiris replaces tiny_equation), but not the buttons of the TinyMCE context toolbars
     // (table rows and cells, image, quick toolbars with Heading 1–6 and so on).
-    // TinyMCE keeps the button names in lower case, while plugins may use capitals (such as tiny_mce_wiris_formulaEditor).
-    const onToolbar = new Set(order.toLowerCase().split(/\s+/));
-    const offered = new Set(editor.options.get('toolbar').flatMap((section) => section.items)
-        .map((name) => name.toLowerCase()));
+    const offered = new Set(onToolbar);
     Object.values(editor.options.get('menu') ?? {}).forEach((menu) => {
         (menu.items ?? '').split(/\s+/).forEach((name) => offered.add(name.toLowerCase()));
     });
