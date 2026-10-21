@@ -17,7 +17,7 @@
 {{!
     @template tiny_fontoptions/setting_toolbarorder
 
-    Toolbar order setting: the text area, the default order and the buttons on the site,
+    Toolbar order setting: the text area, the default order and the buttons in the editor,
     which amd/src/toolbarorder.js reads from a hidden editor.
 
     Context variables required for this template:
@@ -53,7 +53,11 @@
         </button>
         <details class="mt-2">
             <summary>{{#str}} toolbarorder_buttons, tiny_fontoptions {{/str}}</summary>
-            <ul class="list-unstyled mt-1 mb-0" dir="ltr" data-region="buttons"></ul>
+            <p class="mt-1 mb-2">{{#str}} toolbarorder_buttons_desc, tiny_fontoptions {{/str}}</p>
+            <div>{{#str}} toolbarorder_buttonsdefault, tiny_fontoptions {{/str}}</div>
+            <ul class="list-unstyled mb-2" dir="ltr" data-region="buttons"></ul>
+            <div>{{#str}} toolbarorder_buttonsother, tiny_fontoptions {{/str}}</div>
+            <ul class="list-unstyled mb-0" dir="ltr" data-region="otherbuttons"></ul>
         </details>
     </div>
     <div class="d-none" aria-hidden="true">

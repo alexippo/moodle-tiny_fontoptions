@@ -56,8 +56,8 @@ import {
  *
  * TinyMCE moves whole sections to the "More" drawer, from the end, so the most used ones come first
  * and the wide lists (fonts, headings) after them. The sections are kept short, as the drawer wraps them,
- * and a section wider than a phone screen would be split, so there the wide headings list is a section of its own.
- * On phones, where the first toolbar row has room for a few buttons only, the lists get a section of their own too.
+ * and a section wider than a phone screen would be split, so there the wide headings list only shares its section
+ * with the alignment buttons, and the lists (their split buttons are wider) get a section of their own.
  * The buttons of other plugins are placed as well, when the site has them; all other buttons follow ("*").
  */
 const defaultOrders = {
@@ -69,9 +69,9 @@ const defaultOrders = {
         + ' | tiny_media_image tiny_media_video tiny_h5p | table hr | fullscreen | *',
     phone: 'undo redo | bold italic underline strikethrough | tiny_forecolor tiny_backcolor forecolor backcolor removeformat'
         + ' | superscript subscript emoticons charmap | fontfamily fontsize'
-        + ' | blocks | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent'
+        + ' | blocks alignleft aligncenter alignright alignjustify | bullist numlist outdent indent'
         + ' | tiny_link_link tiny_link_unlink tiny_noautolink | tiny_media_image tiny_media_video tiny_h5p | table hr'
-        + ' | tiny_equation tiny_mce_wiris_formulaeditor tiny_mce_wiris_formulaeditorchemistry fullscreen | *',
+        + ' | tiny_equation fullscreen | *',
 };
 
 /** @var {boolean} Whether TinyMCE runs on a phone. */

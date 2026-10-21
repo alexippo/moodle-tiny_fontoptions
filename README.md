@@ -28,17 +28,18 @@ The toolbar follows the usual word processor order:
 ```
 computer, tablet: undo redo | B I U S | colours clear | x² x₂ Ω | font family, size | headings, indent, lists
                   | align | links | media | table — | full screen | the other buttons
-phone:            undo redo | B I U S | colours clear | x² x₂ Ω | font family, size | headings | align | lists
-                  | links | media | table — | full screen | the other buttons
+phone:            undo redo | B I U S | colours clear | x² x₂ Ω | font family, size | headings, align | lists
+                  | links | media | table — | equation, full screen | the other buttons
 ```
 
 TinyMCE moves whole sections to the "More" (⋯) drawer, from the end, so the most used ones come first and the
 wide lists (fonts, headings) after them; the sections are kept short, as the drawer wraps them. A section wider than
-the row is split, so on phones the headings list is a section of its own. The buttons of some other plugins get
-their places too, when the site has them: Styles (tiny_styles) after the colours on a computer, MathType and
-ChemType (tiny_wiris) and the Moodle equation editor after the special characters (on phones before full screen),
-Cancel automatic link (tiny_noautolink) after the links, H5P after the media. All other buttons, such as those of
-plugins installed later, follow in their usual sections. The order can be changed in the settings, see below.
+the row is split, so on phones the headings list only shares its section with the align buttons, and the lists
+(their split buttons are wider) get one of their own. The buttons of some other plugins get their places too,
+when the site has them: Styles (tiny_styles) after the colours on a computer, MathType and ChemType (tiny_wiris)
+and the Moodle equation editor after the special characters (on phones only the equation editor, before full
+screen), Cancel automatic link (tiny_noautolink) after the links, H5P after the media. All other buttons, such as
+those of plugins installed later, follow in their usual sections. The order can be changed in the settings, see below.
 
 * `headings` adds the headings list.
 * `showtoolbar` adds the font family and font size lists, and the colour buttons.
@@ -81,8 +82,12 @@ Buttons which an editor does not have (a disabled plugin, a capability the user 
 The order is applied when the editor is set up, after every plugin has added its buttons.
 
 Below each setting are the default order on the site, with a button to copy it into the field, and the list
-of the buttons for the toolbar and the menu commands (not the context toolbar ones, such as table rows or Heading 1–6). Button names are only known in the browser, so the settings page loads a hidden
-editor with the site configuration to read them.
+of the buttons: those on the default toolbar, and the others which can be put there (menu commands, and the buttons
+of Moodle plugins which another plugin took off the toolbar), but not the context toolbar ones, such as table rows
+or Heading 1–6. Button names are only known in the browser, so the settings page loads a hidden editor
+with the site configuration to read them. That editor is in the system context, so a button which a plugin only
+adds in some places is not in the list, and listing it shows a warning, but it still works there: for example,
+the equation editor only where a TeX filter is on, the media buttons only where files can be added.
 On the page with all TinyMCE settings (`admin/category.php?category=editortiny`) Moodle prints a script
 before the page doctype, and TinyMCE does not start in that quirks mode, so the settings link to the plugin
 settings page there.
@@ -101,6 +106,14 @@ Not included on purpose:
 If `tiny_fontfamily` or `tiny_fontsize` are enabled, their items appear twice;
 the settings page shows a warning. Disable them in
 Site administration > Plugins > Text editors > TinyMCE editor > General settings.
+
+### Compatibility
+
+* MathType (tiny_wiris) replaces the Moodle equation editor (`tiny_equation`) on the toolbar and in the Insert menu.
+  The equation editor is still there and listed below the settings; list `tiny_equation` in the order to have
+  both. Without your own order, the equation editor is not on the toolbar while MathType is enabled.
+* Buttons depend on the place of the editor, the same as without this plugin: filters, file uploads and
+  capabilities decide which buttons a plugin adds. A listed button which an editor does not have is skipped.
 
 ## Accessibility
 

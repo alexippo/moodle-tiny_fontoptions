@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.9.2 (2026102500)
+
+* The list of buttons below the toolbar order settings now also has the buttons of Moodle plugins which another
+  plugin took off the toolbar and the menus, such as the equation editor (`tiny_equation`), which MathType (tiny_wiris)
+  replaces. The list is in two parts: the buttons on the default toolbar and the others which can be listed.
+* The settings say that the list comes from the editor on the settings page and that some buttons are only in
+  some places (the equation editor where a TeX filter is on, the media buttons where files can be added);
+  the warning about unknown button names says the same, instead of "There are no such buttons on this site".
+* New default phone order, the one used on our sites: the headings list shares its section with the alignment
+  buttons, and MathType and ChemType are no longer placed before full screen (they follow with the other buttons).
+* The description of the Toolbar settings heading names the toolbar order of 1.9.0 instead of the TinyMCE one.
+* README: a Compatibility section (MathType and the equation editor, buttons which depend on the place of the editor).
+
 ## 1.9.1 (2026102401)
 
 * Simpler toolbar code: the plugin adds its buttons and the toolbar order puts every button in its place,

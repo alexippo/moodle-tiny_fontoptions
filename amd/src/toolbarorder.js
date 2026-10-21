@@ -110,15 +110,18 @@ export const init = async(fieldId, previewId, loadEditor) => {
         .join('\n');
     preview.querySelector('[data-region="order"]').textContent = order;
 
-    // The list offers the buttons on the toolbar and the ones for the menu bar commands, not the buttons
-    // of the context toolbars (table rows and cells, image, quick toolbars with Heading 1–6 and so on).
+    // The list offers the buttons on the toolbar, the ones for the menu bar commands and all buttons of Moodle plugins
+    // (named after their component), which another plugin may have taken off the toolbar and the menus
+    // (tiny_wiris replaces tiny_equation), but not the buttons of the TinyMCE context toolbars
+    // (table rows and cells, image, quick toolbars with Heading 1–6 and so on).
     // TinyMCE keeps the button names in lower case, while plugins may use capitals (such as tiny_mce_wiris_formulaEditor).
+    const onToolbar = new Set(order.toLowerCase().split(/\s+/));
     const offered = new Set(editor.options.get('toolbar').flatMap((section) => section.items)
         .map((name) => name.toLowerCase()));
     Object.values(editor.options.get('menu') ?? {}).forEach((menu) => {
         (menu.items ?? '').split(/\s+/).forEach((name) => offered.add(name.toLowerCase()));
     });
-    const list = preview.querySelector('[data-region="buttons"]');
+    Object.keys(buttons).filter((name) => name.startsWith('tiny_')).forEach((name) => offered.add(name));
     Object.keys(buttons).filter((name) => offered.has(name)).sort().forEach((name) => {
         const item = document.createElement('li');
         const code = document.createElement('code');
@@ -127,7 +130,7 @@ export const init = async(fieldId, previewId, loadEditor) => {
         if (buttons[name]) {
             item.append(` — ${editor.translate(buttons[name])}`);
         }
-        list.append(item);
+        preview.querySelector(`[data-region="${onToolbar.has(name) ? 'buttons' : 'otherbuttons'}"]`).append(item);
     });
 
     const copy = preview.querySelector('[data-action="copy"]');
