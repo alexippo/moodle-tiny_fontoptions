@@ -19,7 +19,7 @@ and does not load some of its plugins. This plugin brings them back:
 
 Access is controlled by the `tiny/fontoptions:use` capability.
 
-![The editor toolbar on a computer, with all buttons visible](screenshots/toolbar.jpg)
+![The toolbar on a computer: all buttons visible, in word processor order](screenshots/toolbar.jpg)
 
 ## Toolbar layout
 
@@ -138,27 +138,37 @@ reports low contrast and other issues in the edited text.
 
 Dark mode (Moodle 5.2 with local_boost_dark):
 
-![Dark mode](screenshots/dark-mode.jpg)
+![Dark mode: readable lists with a dark mode plugin (local_boost_dark)](screenshots/dark-mode.jpg)
 
 | Phone | Phone, "More" opened |
 |---|---|
-| ![Phone: the most used buttons first](screenshots/phone.jpg) | ![Phone: More opened, the editor grows](screenshots/phone-more.jpg) |
+| ![Phone: the most used buttons first, the rest under More](screenshots/phone.jpg) | ![Phone: More opened, the editor grows with it](screenshots/phone-more.jpg) |
 
 | Headings | Font family | Font size |
 |---|---|---|
-| ![Headings](screenshots/headings.jpg) | ![Font family](screenshots/font-family.jpg) | ![Font size](screenshots/font-size.jpg) |
+| ![Headings: Paragraph, Heading 3–6, Preformatted and Blockquote](screenshots/headings.jpg) | ![Font family list](screenshots/font-family.jpg) | ![Font size list](screenshots/font-size.jpg) |
 
 Settings:
 
-![Font settings](screenshots/settings-fonts.jpg)
+![Settings: fonts, sizes, colours, justify, list styles and automatic links](screenshots/settings-fonts.jpg)
 
-![Toolbar settings](screenshots/settings-toolbar.jpg)
+![Settings: toolbar buttons and the toolbar on phones and tablets](screenshots/settings-toolbar.jpg)
+
+Toolbar order: leave empty for the default order, or copy it into the field and change it:
+
+![Toolbar order: leave empty for the default order, or copy it into the field and change it](screenshots/toolbar-order.jpg)
+
+Toolbar order for phones: one toolbar section per line, `*` for all other buttons:
+
+![Toolbar order for phones: one toolbar section per line, "*" for all other buttons](screenshots/toolbar-order-phone.jpg)
 
 ## Requirements
 
 Moodle 4.5 – 5.3. Tested on Moodle 5.1.8 and 5.2.4.
 
 ## Installation
+
+From Moodle Marketplace: https://marketplace.moodle.com/plugins/tiny_fontoptions
 
 Site administration > Plugins > Install plugins, upload the ZIP; or extract it to
 `lib/editor/tiny/plugins/fontoptions` (`public/lib/editor/tiny/plugins/fontoptions` in Moodle 5.1+)
@@ -171,7 +181,7 @@ The `amd/build` files are produced from `amd/src` with Moodle's standard `grunt 
 ## Translations
 
 The plugin ships with English strings only. Translations are managed in AMOS
-(https://lang.moodle.org) once the plugin is in the Moodle plugins directory.
+(https://lang.moodle.org) and come with the Moodle language packs.
 
 ## Copyright and license
 
