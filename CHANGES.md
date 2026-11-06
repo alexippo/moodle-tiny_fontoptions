@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.9.4 (2026110600)
+
+* The release ZIPs have entries for the directories too, not only for the files, for archive tools
+  which do not create the missing directories themselves (Moodle Marketplace review, issue #1).
+  The plugin code is the same as in 1.9.3.
+
 ## 1.9.3 (2026102501)
 
 * The default orders are the ones used on our sites, with the buttons of a standard Moodle only: Styles (tiny_styles),
