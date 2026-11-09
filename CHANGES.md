@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.9.5 (2026110900)
+
+Clearer settings page, no change in what the settings do:
+
+* The first settings have a heading, "Editor tools": they decide what the editor has (in the Format menu
+  and on the toolbar), the Toolbar settings which of them get toolbar buttons.
+* "Fonts and colours" is now "Fonts and colours on the toolbar"; its description no longer says that the colours
+  are always in the Format menu (they are there when "Text and background colour" is on).
+* The toolbar order description says that a set order decides the toolbar: the toolbar settings only matter
+  for the buttons which "*" brings in.
+* README: the `showtoolbar` setting in the feature table, and that a set order decides the toolbar.
+* The phone order description no longer says that the default phone order puts the text formatting first
+  (it starts with undo and redo since 1.9.1).
+
 ## 1.9.4 (2026110600)
 
 * The release ZIPs have entries for the directories too, not only for the files, for archive tools

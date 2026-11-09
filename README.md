@@ -11,6 +11,7 @@ and does not load some of its plugins. This plugin brings them back:
 | Justify | Format menu, alignment buttons | `justify` |
 | List styles (TinyMCE advlist) | bullet / numbered list buttons | `advlist` |
 | Automatic links (TinyMCE autolink) | typing a URL followed by a space | `autolink` |
+| Font family, font size, colours on the toolbar | toolbar | `showtoolbar` — without it they are in the Format menu only |
 | Headings (Paragraph, Heading 3–6, Preformatted, Blockquote) | toolbar | `headings` |
 | Underline, Strikethrough, Superscript, Subscript, Clear formatting | toolbar | `textformat` |
 | Emojis, Table, Special character, Horizontal line | toolbar | `insert` |
@@ -78,6 +79,8 @@ A button which is not listed is left out of the toolbar (it stays in the menus);
 buttons there instead, in their usual sections, so the buttons of plugins installed later show up too.
 Buttons which an editor does not have (a disabled plugin, a capability the user lacks) are skipped.
 The order is applied when the editor is set up, after every plugin has added its buttons.
+A set order decides the toolbar: a listed button built into TinyMCE (such as the font lists or Underline)
+is shown even when its toolbar setting is off, so the toolbar settings only matter for the buttons which `*` brings in.
 
 Below each setting are the default order on the site, with a button to copy it into the field, and the list
 of the buttons: those on the default toolbar, and the others which can be put there (menu commands, and the buttons

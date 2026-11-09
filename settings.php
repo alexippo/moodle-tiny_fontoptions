@@ -30,6 +30,12 @@ $ADMIN->add('editortiny', new admin_category('tiny_fontoptions', new lang_string
 
 $settings = new admin_settingpage('tiny_fontoptions_settings', new lang_string('settings', 'tiny_fontoptions'));
 if ($ADMIN->fulltree) {
+    $settings->add(new admin_setting_heading(
+        'tiny_fontoptions/editorheading',
+        new lang_string('editorheading', 'tiny_fontoptions'),
+        new lang_string('editorheading_desc', 'tiny_fontoptions')
+    ));
+
     // The older tiny_fontfamily and tiny_fontsize plugins add their own items, so the menu would show them twice.
     $conflicts = array_intersect(['fontfamily', 'fontsize'], \editor_tiny\plugininfo\tiny::get_enabled_plugins());
     if ($conflicts) {
